@@ -1,0 +1,17 @@
+node_modules
+dist
+.next
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+coverage
+.DS_Store
+.idea
+apps/cms/media
+apps/cms/next-env.d.ts
+playwright-report
+test-results
+
+# Не секрет: origin админки для Live Preview в dev
+!apps/web/.env.development

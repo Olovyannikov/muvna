@@ -1,0 +1,43 @@
+{
+  "name": "@muvna/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint:fsd": "steiger ./src",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@effector/router": "^1.2.0",
+    "@effector/router-react": "^1.0.2",
+    "@fontsource-variable/jost": "^5.3.0",
+    "@payloadcms/live-preview": "3.93.0",
+    "@withease/factories": "^1.0.5",
+    "@withease/i18next": "^25.0.0",
+    "clsx": "^2.1.1",
+    "effector": "^23.4.4",
+    "effector-react": "^23.3.0",
+    "effector-refetch": "^0.24.0",
+    "effector-storage": "^8.0.0",
+    "history": "^5.3.0",
+    "i18next": "^25.10.10",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@feature-sliced/steiger-plugin": "^0.8.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "^6.3.0",
+    "jsdom": "^28.0.0",
+    "steiger": "^0.10.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.7",
+    "vitest": "^4.0.18"
+  }
+}

@@ -1,0 +1,10 @@
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.narrow {
+  max-width: calc(760px + var(--gutter) * 2);
+}

@@ -1,0 +1,63 @@
+.richText {
+  font-size: 17px;
+  line-height: 1.7;
+  color: inherit;
+}
+
+.richText > * + * {
+  margin-top: 1em;
+}
+
+.richText h2,
+.richText h3,
+.richText h4 {
+  margin-top: 1.8em;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.richText h2 {
+  font-size: clamp(24px, 3vw, 32px);
+}
+
+.richText h3 {
+  font-size: clamp(20px, 2.4vw, 24px);
+}
+
+.richText ul,
+.richText ol {
+  padding-left: 1.3em;
+}
+
+.richText li + li {
+  margin-top: 0.4em;
+}
+
+.richText a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.richText blockquote {
+  padding-left: 20px;
+  border-left: 2px solid var(--color-accent);
+  font-style: italic;
+}
+
+.richText img {
+  width: 100%;
+  height: auto;
+}
+
+.richText hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.large {
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.6;
+}

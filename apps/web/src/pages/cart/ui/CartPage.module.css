@@ -1,0 +1,42 @@
+.layout {
+  display: grid;
+  gap: clamp(40px, 6vw, 96px);
+  padding-block: clamp(40px, 6vw, 96px);
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .checkout {
+    position: sticky;
+    top: calc(var(--header-height) + 72px);
+  }
+}
+
+.title {
+  margin-bottom: 16px;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 300;
+  line-height: 1;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 24px;
+  font-size: 22px;
+}
+
+.note {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.checkout {
+  padding: clamp(24px, 4vw, 48px);
+  background: var(--color-paper-2);
+}

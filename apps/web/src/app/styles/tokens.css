@@ -1,0 +1,23 @@
+:root {
+  --color-ink: #121212;
+  --color-ink-2: #1d1c1a;
+  --color-paper: #faf8f4;
+  --color-paper-2: #f2efe8;
+  --color-sand: #e8e3d9;
+  --color-muted: #77736b;
+  --color-line: rgba(18, 18, 18, 0.1);
+  --color-line-strong: rgba(18, 18, 18, 0.28);
+  --color-accent: #c9b57a;
+  --color-accent-strong: #8c7a45;
+  --color-danger: #b3261e;
+  --color-success: #3c6e47;
+
+  --font-sans: 'Jost Variable', 'Jost', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --container-width: 1440px;
+  --gutter: clamp(16px, 4vw, 56px);
+  --section-space: clamp(72px, 10vw, 140px);
+  --header-height: 72px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}

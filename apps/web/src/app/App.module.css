@@ -1,0 +1,24 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+}
+
+.preview {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 200;
+  padding: 8px 16px;
+  background: var(--color-accent);
+  color: var(--color-ink);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  pointer-events: none;
+}

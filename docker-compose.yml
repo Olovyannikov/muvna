@@ -1,0 +1,78 @@
+# Продакшн: Postgres + Payload CMS + Caddy (SPA + reverse proxy + HTTPS).
+#   cp .env.example .env && docker compose up -d --build
+#   docker compose --profile tools run --rm seed   # первичное наполнение
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-muvna}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?задайте POSTGRES_PASSWORD в .env}
+      POSTGRES_DB: ${POSTGRES_DB:-muvna}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-muvna}']
+      interval: 5s
+      retries: 10
+
+  cms:
+    image: ${REGISTRY:-ghcr.io/olovyannikov}/muvna-cms:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: apps/cms/Dockerfile
+      target: runner
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment: &cms-env
+      DATABASE_URL: postgres://${POSTGRES_USER:-muvna}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-muvna}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?задайте PAYLOAD_SECRET в .env}
+      PAYLOAD_PUBLIC_SERVER_URL: ${PUBLIC_URL:?задайте PUBLIC_URL в .env}
+      WEB_URL: ${PUBLIC_URL}
+      MEDIA_DIR: /app/media
+    volumes:
+      - media:/app/media
+
+  web:
+    image: ${REGISTRY:-ghcr.io/olovyannikov}/muvna-web:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - cms
+    environment:
+      # Домен (muvna.ru) — Caddy сам получит сертификат Let's Encrypt; «:80» — без HTTPS (по IP).
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+
+  # Разовые задачи: сид и миграции (полный набор зависимостей).
+  seed:
+    profiles: [tools]
+    build:
+      context: .
+      dockerfile: apps/cms/Dockerfile
+      target: tools
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *cms-env
+      NODE_ENV: production
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
+    volumes:
+      - media:/app/media
+
+volumes:
+  pgdata:
+  media:
+  caddy-data:
+  caddy-config:

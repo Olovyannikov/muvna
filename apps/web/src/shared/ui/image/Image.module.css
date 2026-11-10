@@ -1,0 +1,28 @@
+.frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-sand);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.contain {
+  object-fit: contain;
+}
+
+.loaded {
+  opacity: 1;
+}

@@ -1,0 +1,15 @@
+.head {
+  padding-top: clamp(56px, 9vw, 120px);
+}
+
+.title {
+  max-width: 900px;
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.head + * {
+  padding-top: clamp(40px, 5vw, 64px);
+}
