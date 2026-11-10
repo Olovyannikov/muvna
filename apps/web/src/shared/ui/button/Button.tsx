@@ -1,10 +1,9 @@
-import clsx from 'clsx';
+import { Button as MantineButton, type ButtonProps as MantineButtonProps } from '@mantine/core';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 import { AppLink } from '../app-link/AppLink';
-import styles from './Button.module.css';
 
-type Variant = 'primary' | 'accent' | 'outline' | 'ghost';
+type Variant = 'primary' | 'accent' | 'outline';
 
 interface CommonProps {
   variant?: Variant;
@@ -14,13 +13,15 @@ interface CommonProps {
   className?: string;
 }
 
-const classes = ({
-  variant = 'primary',
-  size = 'default',
-  block,
-  className,
-}: Omit<CommonProps, 'children'>) =>
-  clsx(styles.button, styles[variant], size === 'small' && styles.small, block && styles.block, className);
+/** Наши варианты → вариант и цвет Mantine (палитры ink/brass из темы). */
+const toMantine = ({ variant = 'primary', size = 'default', block }: Omit<CommonProps, 'children'>) =>
+  ({
+    variant: variant === 'outline' ? 'outline' : 'filled',
+    color: variant === 'accent' ? 'brass.4' : 'ink.9',
+    autoContrast: true,
+    size: size === 'small' ? 'sm' : 'lg',
+    fullWidth: block,
+  }) satisfies MantineButtonProps;
 
 export const Button = ({
   variant,
@@ -30,7 +31,7 @@ export const Button = ({
   type = 'button',
   ...props
 }: CommonProps & ButtonHTMLAttributes<HTMLButtonElement>) => (
-  <button type={type} className={classes({ variant, size, block, className })} {...props} />
+  <MantineButton type={type} className={className} {...toMantine({ variant, size, block })} {...props} />
 );
 
 export const ButtonLink = ({
@@ -41,7 +42,12 @@ export const ButtonLink = ({
   href,
   children,
 }: CommonProps & { href: string }) => (
-  <AppLink href={href} className={classes({ variant, size, block, className })}>
+  <MantineButton
+    component={AppLink}
+    href={href}
+    className={className}
+    {...toMantine({ variant, size, block })}
+  >
     {children}
-  </AppLink>
+  </MantineButton>
 );

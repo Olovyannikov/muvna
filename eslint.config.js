@@ -44,9 +44,18 @@ export default tseslint.config(
               group: ['@/*/*/*', '!@/shared/*'],
               message: 'Импортируйте слайс через его public API (index.ts).',
             },
+            {
+              group: ['@mantine/*', 'embla-carousel*'],
+              message: 'Mantine подключается только через @/shared/ui.',
+            },
           ],
         },
       ],
     },
+  },
+  {
+    // Mantine напрямую — только в shared/ui и в точке входа (CSS-слои после `@layer base, mantine`).
+    files: ['apps/web/src/shared/ui/**/*.{ts,tsx}', 'apps/web/src/app/index.tsx'],
+    rules: { 'no-restricted-imports': 'off' },
   },
 );

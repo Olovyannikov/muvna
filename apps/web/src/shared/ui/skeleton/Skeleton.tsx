@@ -1,8 +1,6 @@
-import clsx from 'clsx';
+import { Skeleton as MantineSkeleton } from '@mantine/core';
 import type { CSSProperties } from 'react';
 
-import styles from './Skeleton.module.css';
-
 export const Skeleton = ({ className, style }: { className?: string; style?: CSSProperties }) => (
-  <div className={clsx(styles.skeleton, className)} style={style} aria-hidden="true" />
+  <MantineSkeleton className={className} style={style} radius={0} aria-hidden="true" />
 );

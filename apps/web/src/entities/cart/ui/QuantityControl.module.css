@@ -4,25 +4,6 @@
   border: 1px solid var(--color-line-strong);
 }
 
-.button {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-
-.button:hover:not(:disabled) {
-  background: var(--color-paper-2);
-}
-
-.button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
 .value {
   min-width: 28px;
   text-align: center;

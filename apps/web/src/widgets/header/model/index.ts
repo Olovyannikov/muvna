@@ -9,6 +9,7 @@ import { router } from '@/shared/routing';
 
 export const HeaderModel = createModel(() => {
   const menuToggled = createEvent();
+  const menuClosed = createEvent();
   const sectionHovered = createEvent<number>();
   const sectionToggled = createEvent<number>();
   const megaMenuLeft = createEvent();
@@ -16,7 +17,7 @@ export const HeaderModel = createModel(() => {
   /** Мобильное меню. */
   const $isMenuOpen = createStore(false)
     .on(menuToggled, (open) => !open)
-    .reset(router.updated);
+    .reset(menuClosed, router.updated);
 
   /** Раздел, чьё мега-меню раскрыто. */
   const $openSection = createStore<number | null>(null)
@@ -34,6 +35,7 @@ export const HeaderModel = createModel(() => {
       isMenuOpen: $isMenuOpen,
       openSection: $openSection,
       onMenuToggle: menuToggled,
+      onMenuClose: menuClosed,
       onSectionHover: sectionHovered,
       onSectionClick: sectionToggled,
       onMegaMenuLeave: megaMenuLeft,

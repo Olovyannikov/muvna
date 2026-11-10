@@ -1,28 +1,16 @@
 import { reflect } from '@effector/reflect';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
 
 import type { NavSection } from '@/entities/site';
 
 import type { Site } from '@/shared/api';
 import { useT } from '@/shared/i18n';
-import { AppLink, BagIcon, CloseIcon, MenuIcon } from '@/shared/ui';
+import { Accordion, AppLink, BagIcon, Burger, Drawer, useWindowScroll } from '@/shared/ui';
 
 import { HeaderModel } from '../model';
 import styles from './Header.module.css';
 import { LocaleSwitcher } from './LocaleSwitcher';
 import { Logo } from './Logo';
-
-const useScrolled = () => {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  return scrolled;
-};
 
 interface Props {
   sections: NavSection[] | null;
@@ -32,6 +20,7 @@ interface Props {
   isMenuOpen: boolean;
   openSection: number | null;
   onMenuToggle: () => void;
+  onMenuClose: () => void;
   onSectionHover: (id: number) => void;
   onSectionClick: (id: number) => void;
   onMegaMenuLeave: () => void;
@@ -46,16 +35,15 @@ const HeaderView = ({
   isMenuOpen: menuOpen,
   openSection,
   onMenuToggle,
+  onMenuClose,
   onSectionHover,
   onSectionClick,
   onMegaMenuLeave,
   onCartClick,
 }: Props) => {
   const t = useT();
-  const scrolled = useScrolled();
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-  }, [menuOpen]);
+  const [{ y }] = useWindowScroll();
+  const scrolled = y > 24;
 
   const transparent = hasHero && !scrolled && !menuOpen && openSection === null;
   const links = site?.navLinks ?? [];
@@ -68,16 +56,14 @@ const HeaderView = ({
         onMouseLeave={onMegaMenuLeave}
       >
         <div className={styles.bar}>
-          <button
-            type="button"
-            className={clsx(styles.iconButton, styles.burger)}
+          <Burger
+            className={styles.burger}
+            opened={menuOpen}
             onClick={onMenuToggle}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
+            size="sm"
+            color="currentColor"
             aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
-          >
-            {menuOpen ? <CloseIcon /> : <MenuIcon />}
-          </button>
+          />
 
           <nav className={styles.utility} aria-label={t('nav.info')}>
             {links.map((link) => (
@@ -139,19 +125,37 @@ const HeaderView = ({
         </nav>
       </header>
 
-      <div id="mobile-menu" className={clsx(styles.mobile, menuOpen && styles.mobileOpen)} hidden={!menuOpen}>
-        {sections?.map((section) => (
-          <details key={section.id} className={styles.mobileSection}>
-            <summary>{section.title}</summary>
-            <ul role="list">
-              {section.categories.map((category) => (
-                <li key={category.id}>
-                  <AppLink href={category.href}>{category.title}</AppLink>
-                </li>
-              ))}
-            </ul>
-          </details>
-        ))}
+      <Drawer
+        opened={menuOpen}
+        onClose={onMenuClose}
+        position="left"
+        size="100%"
+        withCloseButton={false}
+        hiddenFrom="lg"
+        withOverlay={false}
+        zIndex={40}
+        classNames={{ inner: styles.mobileInner, content: styles.mobile, body: styles.mobileBody }}
+        transitionProps={{ transition: 'fade', duration: 200 }}
+      >
+        <Accordion
+          classNames={{ item: styles.mobileSection, control: styles.mobileControl }}
+          chevronPosition="right"
+        >
+          {sections?.map((section) => (
+            <Accordion.Item key={section.id} value={String(section.id)}>
+              <Accordion.Control>{section.title}</Accordion.Control>
+              <Accordion.Panel>
+                <ul role="list" className={styles.mobileList}>
+                  {section.categories.map((category) => (
+                    <li key={category.id}>
+                      <AppLink href={category.href}>{category.title}</AppLink>
+                    </li>
+                  ))}
+                </ul>
+              </Accordion.Panel>
+            </Accordion.Item>
+          ))}
+        </Accordion>
         <div className={styles.mobileLinks}>
           {links.map((link) => (
             <AppLink key={link.id ?? link.url} href={link.url}>
@@ -160,7 +164,7 @@ const HeaderView = ({
           ))}
           <LocaleSwitcher />
         </div>
-      </div>
+      </Drawer>
     </>
   );
 };

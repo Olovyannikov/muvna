@@ -9,3 +9,5 @@ export { SectionHeading } from './section-heading/SectionHeading';
 export * from './icons';
 export { ErrorState } from './error-state/ErrorState';
 export { createPageView, PageSkeleton, NotFoundState } from './page-view/PageView';
+export { theme } from './theme/theme';
+export * from './mantine';

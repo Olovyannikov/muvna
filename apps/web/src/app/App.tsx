@@ -9,6 +9,7 @@ import { Header } from '@/widgets/header';
 import { isPreview } from '@/shared/config';
 import { useT } from '@/shared/i18n';
 import { router } from '@/shared/routing';
+import { MantineProvider, theme } from '@/shared/ui';
 
 import styles from './App.module.css';
 import { RoutesView } from './routes';
@@ -20,16 +21,18 @@ const PreviewBanner = () => {
 
 export const App = ({ scope }: { scope: Scope }) => (
   <Provider value={scope}>
-    <RouterProvider router={router}>
-      <div className={styles.shell}>
-        <Header />
-        <main className={styles.main}>
-          <RoutesView />
-        </main>
-        <Footer />
-      </div>
-      <CartDrawer />
-      {isPreview && <PreviewBanner />}
-    </RouterProvider>
+    <MantineProvider theme={theme} forceColorScheme="light">
+      <RouterProvider router={router}>
+        <div className={styles.shell}>
+          <Header />
+          <main className={styles.main}>
+            <RoutesView />
+          </main>
+          <Footer />
+        </div>
+        <CartDrawer />
+        {isPreview && <PreviewBanner />}
+      </RouterProvider>
+    </MantineProvider>
   </Provider>
 );
