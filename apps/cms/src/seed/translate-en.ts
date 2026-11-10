@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { getPayload } from 'payload';
 
 import config from '../payload.config';
-import { fromParagraphs } from './lexical';
+import { fromHtml, fromParagraphs } from './lexical';
 
 const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'data', 'en');
 const read = <T>(file: string): T | null =>
@@ -170,16 +170,15 @@ const run = async () => {
     log('страницы');
   }
 
-  const series =
-    read<
-      {
-        id: number;
-        title: string | null;
-        tagline: string | null;
-        heading: string | null;
-        description: string[];
-      }[]
-    >('series.json');
+  const series = read<
+    {
+      id: number;
+      title: string | null;
+      tagline: string | null;
+      heading: string | null;
+      description: string[];
+    }[]
+  >('series.json');
   for (const item of series ?? []) {
     await payload.update({
       collection: 'series',
@@ -208,6 +207,19 @@ const run = async () => {
     });
   }
   if (products) log(`товары: ${products.length}`);
+
+  // Подробные описания: HTML с переводом (те же теги, что у русского) → rich text.
+  const details = read<{ id: number; html: string }[]>('product-details.json');
+  for (const item of details ?? []) {
+    await payload.update({
+      collection: 'products',
+      id: item.id,
+      locale: 'en',
+      draft: false,
+      data: { ...published, details: fromHtml(item.html) as never },
+    });
+  }
+  if (details) log(`описания товаров: ${details.length}`);
 
   log('готово ✓');
   process.exit(0);
