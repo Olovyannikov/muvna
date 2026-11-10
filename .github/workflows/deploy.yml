@@ -64,7 +64,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
-          source: docker-compose.yml,deploy/Caddyfile,deploy/dev.compose.yml
+          source: docker-compose.yml,deploy/Caddyfile,deploy/dev.compose.yml,deploy/backup.sh,deploy/clone-prod-to-dev.sh
           target: ${{ env.DIR }}
       - name: Pull & restart
         if: env.VPS_HOST != ''
