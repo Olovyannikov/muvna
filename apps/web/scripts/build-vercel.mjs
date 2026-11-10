@@ -33,7 +33,14 @@ writeFileSync(path.join(fn, 'package.json'), JSON.stringify({ type: 'module' }))
 writeFileSync(
   path.join(fn, '.vc-config.json'),
   JSON.stringify(
-    { runtime: 'nodejs22.x', handler: 'index.mjs', launcherType: 'Nodejs', maxDuration: 30 },
+    {
+      runtime: 'nodejs22.x',
+      handler: 'index.mjs',
+      launcherType: 'Nodejs',
+      maxDuration: 30,
+      // Франкфурт — ближе всего к CMS в Москве: каждый рендер ходит туда за данными.
+      regions: ['fra1'],
+    },
     null,
     2,
   ),
