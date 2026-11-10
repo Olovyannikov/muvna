@@ -1,5 +1,6 @@
 import { invoke } from '@withease/factories';
-import { createQuery, keepFresh } from 'effector-refetch';
+import { sample } from 'effector';
+import { createQuery } from 'effector-refetch';
 
 import type { Site } from '@/shared/api';
 import { $locale, type Locale } from '@/shared/i18n';
@@ -17,8 +18,9 @@ export const SiteModel = createModel(() => {
   const siteQuery = createQuery({ effect: fetchSiteFx, retry: 2, ...localized });
   const navigationQuery = createQuery({ effect: fetchNavigationFx, retry: 2, ...localized });
 
-  keepFresh(siteQuery, { source: $locale });
-  keepFresh(navigationQuery, { source: $locale });
+  // keepFresh пропускает запросы без параметров ($params === undefined), поэтому при смене
+  // языка перезапрашиваем явно.
+  sample({ clock: $locale.updates, target: [siteQuery.refresh, navigationQuery.refresh] });
 
   invoke(syncLivePreview<Site>, {
     query: siteQuery,
