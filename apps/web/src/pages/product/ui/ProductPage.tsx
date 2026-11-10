@@ -36,7 +36,7 @@ const GalleryView = ({ product, active, onImageSelect }: GalleryProps) => {
           ratio="1 / 1"
           fit="contain"
           priority
-          sizes="(min-width: 1024px) 55vw, 100vw"
+          sizes="(min-width: 1440px) 740px, (min-width: 1024px) 52vw, 100vw"
         />
       </div>
       {images.length > 1 && (

@@ -15,3 +15,6 @@ test-results
 
 # Не секрет: origin админки для Live Preview в dev
 !apps/web/.env.development
+
+# Временные файлы апскейла картинок
+.upscaled

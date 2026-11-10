@@ -47,7 +47,11 @@ export const SeriesSection = ({ group, index, basePath }: Props) => {
           >
             {series?.image && (
               <div className={styles.storyMedia}>
-                <Image media={series.image} size="hero" sizes="(min-width: 1024px) 60vw, 100vw" />
+                <Image
+                  media={series.image}
+                  size="hero"
+                  sizes="(min-width: 1440px) 820px, (min-width: 1024px) 58vw, 100vw"
+                />
               </div>
             )}
             <div className={styles.storyBody}>

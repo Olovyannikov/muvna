@@ -19,11 +19,15 @@ export const Media: CollectionConfig = {
     staticDir: process.env.MEDIA_DIR || 'media',
     mimeTypes: ['image/*'],
     focalPoint: true,
-    formatOptions: { format: 'webp', options: { quality: 82 } },
+    // Оригинал: не больше 2560 px по длинной стороне, webp высокого качества.
+    resizeOptions: { width: 2560, height: 2560, fit: 'inside', withoutEnlargement: true },
+    formatOptions: { format: 'webp', options: { quality: 88 } },
+    // Ступени для srcset: браузер сам выбирает подходящую под ширину экрана и DPR.
     imageSizes: [
       { name: 'thumb', width: 480, formatOptions: { format: 'webp', options: { quality: 80 } } },
-      { name: 'card', width: 960, formatOptions: { format: 'webp', options: { quality: 80 } } },
-      { name: 'hero', width: 2048, formatOptions: { format: 'webp', options: { quality: 80 } } },
+      { name: 'card', width: 960, formatOptions: { format: 'webp', options: { quality: 82 } } },
+      { name: 'md', width: 1440, formatOptions: { format: 'webp', options: { quality: 82 } } },
+      { name: 'hero', width: 1920, formatOptions: { format: 'webp', options: { quality: 84 } } },
     ],
   },
 };

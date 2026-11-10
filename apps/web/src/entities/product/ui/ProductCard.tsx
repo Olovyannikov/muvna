@@ -24,7 +24,7 @@ export const ProductCard = ({ product, href, action }: Props) => {
           size="card"
           ratio="1 / 1"
           fit="contain"
-          sizes="(min-width: 1200px) 25vw, (min-width: 700px) 33vw, 50vw"
+          sizes="(min-width: 1440px) 330px, (min-width: 1180px) 23vw, (min-width: 760px) 31vw, 47vw"
         />
         {product.badge && <span className={styles.badge}>{t(`product.badge.${product.badge}`)}</span>}
         {product.inStock === false && <span className={styles.badge}>{t('product.outOfStock')}</span>}

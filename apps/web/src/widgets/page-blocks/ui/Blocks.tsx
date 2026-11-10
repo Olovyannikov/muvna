@@ -110,7 +110,12 @@ const CategoryTiles = ({ block }: { block: CategoryTilesBlock }) => (
         {block.tiles?.map((tile) => (
           <li key={tile.id ?? tile.url}>
             <AppLink href={tile.url} className={styles.tile}>
-              <Image media={tile.image} size="card" ratio="4 / 5" sizes="(min-width: 1024px) 25vw, 50vw" />
+              <Image
+                media={tile.image}
+                size="card"
+                ratio="4 / 5"
+                sizes="(min-width: 1440px) 330px, (min-width: 1024px) 23vw, 48vw"
+              />
               <span className={styles.tileTitle}>
                 {tile.title} <ArrowIcon size={18} />
               </span>
