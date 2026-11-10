@@ -60,7 +60,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           source: docker-compose.yml
-          target: ~/muvna
+          target: muvna
       - name: Pull & restart
         if: env.VPS_HOST != ''
         uses: appleboy/ssh-action@v1.2.0
@@ -70,11 +70,14 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
+            set -e
             cd ~/muvna
-            export TAG=${{ github.sha }}
+            # Версия фиксируется в .env — ручной `docker compose up` не откатит деплой.
+            sed -i "s/^TAG=.*/TAG=${{ github.sha }}/" .env
             docker compose pull cms web
             docker compose up -d --remove-orphans
             docker image prune -f
+            docker compose ps
       - name: Skip (no VPS secrets)
         if: env.VPS_HOST == ''
         run: echo "VPS_HOST не задан — образы собраны, выкладка пропущена."
