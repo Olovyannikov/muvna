@@ -21,7 +21,7 @@ pnpm install
 pnpm db:up                      # Postgres в Docker (docker-compose.dev.yml)
 cp apps/cms/.env.example apps/cms/.env   # задайте PAYLOAD_SECRET и пароль администратора
 pnpm dev                        # CMS → http://localhost:3000/admin, сайт → http://localhost:5173
-pnpm seed                       # один раз: контент и картинки со старого muvna.ru + администратор
+pnpm seed && pnpm --filter @muvna/cms seed:en   # один раз: контент со старого muvna.ru, английская локаль, администратор
 ```
 
 Vite проксирует `/api` в CMS, поэтому в браузере сайт и API живут на одном origin, как и в проде.

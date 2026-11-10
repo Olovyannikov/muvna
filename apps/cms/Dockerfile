@@ -18,7 +18,7 @@ RUN PAYLOAD_SECRET=build DATABASE_URL=postgres://build@localhost/build pnpm --fi
 # Образ для разовых задач (сид, миграции): полный набор зависимостей.
 FROM build AS tools
 WORKDIR /repo/apps/cms
-CMD ["pnpm", "seed"]
+CMD ["sh", "-c", "pnpm seed && pnpm seed:en"]
 
 FROM node:24-alpine AS runner
 WORKDIR /app

@@ -15,7 +15,8 @@
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "media:refresh": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/refresh-media.ts"
+    "media:refresh": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/refresh-media.ts",
+    "seed:en": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/translate-en.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.93.0",

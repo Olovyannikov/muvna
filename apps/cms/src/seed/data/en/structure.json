@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "1": "Espresso Tools",
+    "2": "Alternative Brewing",
+    "3": "Scales & Other Tools"
+  },
+  "categories": {
+    "1": { "title": "tampers & levelers", "subtitle": "tools for espresso" },
+    "2": { "title": "distributors", "subtitle": "tools for espresso" },
+    "3": { "title": "filter baskets", "subtitle": "tools for espresso" },
+    "4": { "title": "portafilters", "subtitle": "tools for espresso" },
+    "5": { "title": "milk pitchers", "subtitle": "tools for espresso" },
+    "6": { "title": "knock boxes, stations & mats", "subtitle": "tools for espresso" },
+    "7": { "title": "drippers", "subtitle": "tools for alternative coffee brewing" },
+    "8": { "title": "servers", "subtitle": "tools for alternative coffee brewing" },
+    "9": { "title": "filters", "subtitle": "tools for alternative coffee brewing" },
+    "10": { "title": "grinders & accessories", "subtitle": "tools for alternative coffee brewing" },
+    "11": { "title": "smart scales", "subtitle": "coffee brewing tools" },
+    "12": { "title": "dosing", "subtitle": "coffee brewing tools" },
+    "13": { "title": "milk accessories", "subtitle": "frothers, latte art tools and thermometers" },
+    "14": { "title": "cups & glassware", "subtitle": "coffee cups, mugs and glasses" },
+    "15": { "title": "other accessories", "subtitle": "coffee brewing tools" }
+  },
+  "site": {
+    "navLinks": ["Partnership", "Contacts"],
+    "companyName": "Elcanto",
+    "about": "Elcanto has been on the Russian market since 2009, supplying premium coffee and tea products, accessories for hot drinks and coffee equipment.",
+    "address": "7 Vvedenskogo Kanala, Saint Petersburg, Russia",
+    "clientService": "Our managers will gladly calculate delivery to any city in Russia and pack your order.\nPay online or by invoice.",
+    "footerLinks": ["Privacy policy"],
+    "copyright": "© 2026 Elcanto · MUVNA"
+  },
+  "pages": {
+    "home": {
+      "title": "Home",
+      "meta": {
+        "title": "MUVNA — innovative coffee tools",
+        "description": "Tampers, smart scales, precision filter baskets, portafilters and accessories for alternative brewing."
+      },
+      "layout": [
+        {
+          "slides": [
+            { "eyebrow": "#muvnacoffeetools", "title": "Tools for the perfect cup", "text": "Express yourself with #muvnacoffeetools", "link": "Shop the catalog" },
+            { "eyebrow": "Alternative Brewing", "title": "Drippers", "text": "Tools for alternative coffee brewing", "link": "Explore" },
+            { "eyebrow": "Scales & Other Tools", "title": "Smart scales", "text": "Coffee brewing tools", "link": "Explore" }
+          ]
+        },
+        {
+          "eyebrow": "The story of MUVNA and coffee",
+          "title": "A team that lives coffee",
+          "text": [
+            "There is a special group of people who get together to talk about the art of making the perfect cup, savour the nuances of every bean and spend their lives speaking in terms of water temperature, grind size, roast and extraction curves…",
+            "This is the MUVNA team — a team that lives coffee.",
+            "It brings together a coffee equipment research lab, a roastery and a coffee shop… Everything here revolves around coffee.",
+            "Discover the world of coffee with MUVNA!"
+          ]
+        },
+        {
+          "eyebrow": "Catalog",
+          "title": "Tools for every step",
+          "tiles": ["Tampers & levelers", "Filter baskets", "Portafilters", "Milk pitchers", "Drippers", "Grinders & accessories", "Smart scales", "Cups & glassware"]
+        },
+        {
+          "eyebrow": "Our products",
+          "title": "CLICK new tamper",
+          "text": [
+            "A unique design with a built-in three-stage spring.",
+            "Finish every tamp with the signature CLICK.",
+            "The flawless mirror-polished stainless steel finish feels reliable and premium."
+          ],
+          "link": "Learn more"
+        },
+        {
+          "title": "MUVNA smart coffee scales",
+          "text": [
+            "MUVNA smart scales measure precisely in 0.1 g steps with a maximum load of 2 kg.",
+            "A range of smart brewing modes for different scenarios: automatic tracking of brew time, water weight, coffee-to-water ratio and more."
+          ],
+          "link": "Learn more"
+        },
+        {
+          "title": "Precision extraction baskets",
+          "text": [
+            "Compared to standard baskets, our high-precision extraction baskets bring out brighter flavour.",
+            "Different hole diameters, counts and patterns give different results during extraction."
+          ],
+          "link": "Learn more"
+        },
+        {
+          "title": "MUVNA bottomless portafilters",
+          "text": [
+            "An open bottomless design and a wide range of models compatible with the most popular espresso machines let you watch every shot.",
+            "Upgradeable: the universal detachable handle comes in resin, solid wood, plastic and silicone."
+          ],
+          "link": "Learn more"
+        },
+        { "eyebrow": "Barista's choice", "title": "Popular", "link": "Full catalog" },
+        {
+          "eyebrow": "MUVNA SPIRIT",
+          "title": "From product to perfection",
+          "text": ["From product to perfection, step by step: specialization, persistence, love and reliability are the principles we stay true to."]
+        }
+      ]
+    },
+    "cooperation": {
+      "title": "Partnership",
+      "layout": [
+        { "slides": [{ "eyebrow": "MUVNA", "title": "Partnership", "text": "Open to dialogue with the coffee community and regional partners" }] },
+        {
+          "title": "For coffee enthusiasts and professionals",
+          "text": [
+            "The MUVNA team is open to dialogue with the coffee community and keen to work with content creators and opinion leaders. If you would like to get to know our products and test new releases, we will be happy to discuss the details — please email us at info@elcanto.ru."
+          ],
+          "link": "Email us"
+        },
+        {
+          "title": "For regional dealers",
+          "text": [
+            "In 2026 we are starting to expand the MUVNA distribution network across Russia's regions. We are looking for reliable partners who share the brand's values and want to make modern coffee accessories available to as many coffee lovers as possible.",
+            "If you see yourself as part of this, send your proposals to the same address — info@elcanto.ru. We look forward to growing the culture of quality coffee in Russia together."
+          ],
+          "link": "Email us"
+        },
+        {
+          "eyebrow": "MUVNA SPIRIT",
+          "text": ["From product to perfection, step by step: specialization, persistence, love and reliability are the principles we stay true to."]
+        }
+      ]
+    },
+    "contact": {
+      "title": "Contacts",
+      "layout": [
+        {
+          "title": "Elcanto",
+          "content": [
+            "Elcanto supplies premium coffee and tea products, accessories for preparing drinks and coffee equipment. We are the official representative of MilanoBar, AnyBar, Mhw-3Bomber, WPM, JoeFrex, Bialetti, Gnali&Zani and Lumian.",
+            "Our range also includes Aeropress, Hario and Urnex products.",
+            "Call us at +7 953 150 15 20 or email info@elcanto.ru."
+          ]
+        },
+        {
+          "title": "Request the wholesale price list",
+          "text": ["Leave your contacts and we will send the current wholesale price list and partnership terms."],
+          "submitLabel": "Send request",
+          "successMessage": "Thank you! We will get in touch."
+        }
+      ]
+    },
+    "privacy": { "title": "Privacy policy" }
+  }
+}
