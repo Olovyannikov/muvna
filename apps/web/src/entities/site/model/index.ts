@@ -15,8 +15,16 @@ const localized = {
 
 /** Общие данные сайта: настройки (шапка, подвал, контакты) и дерево каталога для меню. */
 export const SiteModel = createModel(() => {
-  const siteQuery = createQuery({ effect: fetchSiteFx, retry: 2, ...localized });
-  const navigationQuery = createQuery({ effect: fetchNavigationFx, retry: 2, ...localized });
+  // name — стабильные sid для SSR; кэш — чтобы после гидратации не перезапрашивать.
+  const cache = { staleAfter: 5 * 60_000 };
+  const siteQuery = createQuery({ name: 'site', effect: fetchSiteFx, retry: 2, cache, ...localized });
+  const navigationQuery = createQuery({
+    name: 'navigation',
+    effect: fetchNavigationFx,
+    retry: 2,
+    cache,
+    ...localized,
+  });
 
   // keepFresh пропускает запросы без параметров ($params === undefined), поэтому при смене
   // языка перезапрашиваем явно.

@@ -12,6 +12,7 @@ import { router } from '@/shared/routing';
 import { MantineProvider, theme } from '@/shared/ui';
 
 import styles from './App.module.css';
+import { AppGate } from './model';
 import { RoutesView } from './routes';
 
 const PreviewBanner = () => {
@@ -23,6 +24,7 @@ export const App = ({ scope }: { scope: Scope }) => (
   <Provider value={scope}>
     <MantineProvider theme={theme} forceColorScheme="light">
       <RouterProvider router={router}>
+        <AppGate />
         <div className={styles.shell}>
           <Header />
           <main className={styles.main}>

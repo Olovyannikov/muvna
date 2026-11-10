@@ -1,7 +1,7 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { persist } from 'effector-storage/local';
 
-import { appStarted, createModel } from '@/shared/lib';
+import { appMounted, createModel } from '@/shared/lib';
 import { router } from '@/shared/routing';
 
 export const MAX_QUANTITY = 99;
@@ -61,8 +61,9 @@ export const CartModel = createModel(() => {
   sample({ clock: itemAdded, target: drawerOpened });
   sample({ clock: router.updated, target: drawerClosed });
 
-  // pickup: значение из localStorage читается в том скоупе, где стартовало приложение.
-  persist({ store: $items, key: 'muvna:cart', pickup: appStarted });
+  // pickup: корзина из localStorage читается в браузере после гидратации — серверная разметка
+  // (пустая корзина) совпадает с клиентской, а затем подставляется сохранённое.
+  persist({ store: $items, key: 'muvna:cart', pickup: appMounted });
 
   return {
     viewModel: {

@@ -21,14 +21,15 @@
     border-color 0.35s ease;
 }
 
-/* Над полноэкранным фото шапка не занимает места в потоке. */
-.overlay {
+/* Страница начинается с полноэкранного фото — шапка поверх него и не занимает места в потоке. */
+:global(body:has([data-hero-first])) .header {
   position: fixed;
   left: 0;
   right: 0;
 }
 
-.transparent {
+/* Прозрачная, пока не прокрутили и не открыли меню. */
+:global(body:has([data-hero-first])) .header:not([data-solid]) {
   background: transparent;
   color: #fff;
   border-color: rgba(255, 255, 255, 0.18);
@@ -294,7 +295,7 @@
     border-top: 1px solid var(--color-line);
   }
 
-  .transparent .catalog {
+  :global(body:has([data-hero-first])) .header:not([data-solid]) .catalog {
     border-color: rgba(255, 255, 255, 0.18);
   }
 

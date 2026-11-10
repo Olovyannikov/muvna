@@ -3,6 +3,7 @@ import { createRequestFx } from 'effector-refetch';
 import {
   findOne,
   payloadRequest,
+  productCardSelect,
   type Category,
   type PaginatedDocs,
   type Product,
@@ -52,6 +53,7 @@ export const fetchCategoryFx = createRequestFx<CategoryParams, CategoryView>(asy
       where: { and: [{ slug: { equals: params.category } }, { 'section.slug': { equals: params.section } }] },
       depth: 1,
       joins: { series: false },
+      select: { title: true, slug: true, section: true, hero: true, meta: true },
     },
     { locale: params.locale, signal },
   );
@@ -59,11 +61,23 @@ export const fetchCategoryFx = createRequestFx<CategoryParams, CategoryView>(asy
   const byCategory = { where: { category: { equals: category.id } }, sort: '_order', limit: 300, depth: 1 };
   const [series, products] = await Promise.all([
     payloadRequest<PaginatedDocs<Series>>('/series', {
-      query: { ...byCategory, joins: { products: false } },
+      query: {
+        ...byCategory,
+        joins: { products: false },
+        select: { title: true, anchor: true, tagline: true, heading: true, description: true, image: true },
+      },
       locale: params.locale,
       signal,
     }),
-    payloadRequest<PaginatedDocs<Product>>('/products', { query: byCategory, locale: params.locale, signal }),
+    payloadRequest<PaginatedDocs<Product>>('/products', {
+      query: {
+        ...byCategory,
+        select: productCardSelect,
+        populate: { series: { title: true }, categories: { slug: true } },
+      },
+      locale: params.locale,
+      signal,
+    }),
   ]);
 
   return { category, groups: groupBySeries(series.docs, products.docs) };

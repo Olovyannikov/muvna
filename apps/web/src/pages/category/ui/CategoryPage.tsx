@@ -1,7 +1,6 @@
 import { list, reflect } from '@effector/reflect';
 
 import type { Category } from '@/shared/api';
-import { HeroGate } from '@/shared/lib';
 import { createPageView, Image } from '@/shared/ui';
 
 import type { SeriesGroup } from '../api';
@@ -11,8 +10,7 @@ import { SeriesSection } from './SeriesSection';
 
 const CategoryHeroView = ({ category }: { category: Category | null }) =>
   category && (
-    <section className={styles.hero}>
-      <HeroGate />
+    <section className={styles.hero} data-hero-first>
       <Image media={category.hero?.image} size="hero" priority className={styles.heroImage} />
       <div className={styles.heroContent}>
         <p className={styles.eyebrow}>{category.hero?.title || 'MUVNA'}</p>

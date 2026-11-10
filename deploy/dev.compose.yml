@@ -1,0 +1,59 @@
+# Dev-стенд для отладки: отдельные БД, медиа и секреты; входящий трафик — через Caddy прод-стека
+# (сеть muvna-edge, хост DEV_SITE_ADDRESS). Разворачивается из ветки develop:
+#   cd ~/muvna-dev && docker compose -p muvna-dev -f deploy/dev.compose.yml up -d
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-muvna}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?задайте POSTGRES_PASSWORD в .env}
+      POSTGRES_DB: ${POSTGRES_DB:-muvna}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-muvna}']
+      interval: 5s
+      retries: 10
+
+  cms:
+    image: ${REGISTRY:-ghcr.io/olovyannikov}/muvna-cms:${TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-muvna}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-muvna}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?задайте PAYLOAD_SECRET в .env}
+      PAYLOAD_PUBLIC_SERVER_URL: ${PUBLIC_URL:?задайте PUBLIC_URL в .env}
+      WEB_URL: ${PUBLIC_URL}
+      MEDIA_DIR: /app/media
+    volumes:
+      - media:/app/media
+    networks:
+      default:
+      edge:
+        aliases: [dev-cms]
+
+  web:
+    image: ${REGISTRY:-ghcr.io/olovyannikov}/muvna-web:${TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      - cms
+    environment:
+      PUBLIC_URL: ${PUBLIC_URL}
+      CMS_INTERNAL_URL: http://cms:3000
+      PORT: 3001
+    networks:
+      default:
+      edge:
+        aliases: [dev-web]
+
+networks:
+  edge:
+    name: muvna-edge
+    external: true
+
+volumes:
+  pgdata:
+  media:

@@ -16,7 +16,6 @@ interface Props {
   sections: NavSection[] | null;
   site: Site | null;
   cartCount: number;
-  hasHero: boolean;
   isMenuOpen: boolean;
   openSection: number | null;
   onMenuToggle: () => void;
@@ -31,7 +30,6 @@ const HeaderView = ({
   sections,
   site,
   cartCount,
-  hasHero,
   isMenuOpen: menuOpen,
   openSection,
   onMenuToggle,
@@ -45,14 +43,15 @@ const HeaderView = ({
   const [{ y }] = useWindowScroll();
   const scrolled = y > 24;
 
-  const transparent = hasHero && !scrolled && !menuOpen && openSection === null;
   const links = site?.navLinks ?? [];
 
   return (
     <>
       {site?.announcement && <div className={styles.announcement}>{site.announcement}</div>}
       <header
-        className={clsx(styles.header, transparent && styles.transparent, hasHero && styles.overlay)}
+        className={styles.header}
+        // Прозрачность над первым экраном решает CSS (:has([data-hero-first])), эти флаги её отключают.
+        data-solid={scrolled || menuOpen || openSection !== null || undefined}
         onMouseLeave={onMegaMenuLeave}
       >
         <div className={styles.bar}>

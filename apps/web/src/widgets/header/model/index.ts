@@ -3,9 +3,9 @@ import { createEvent, createStore } from 'effector';
 import { CartModel } from '@/entities/cart';
 import { SiteModel } from '@/entities/site';
 
-import { $locale, localeSwitched } from '@/shared/i18n';
-import { $hasHero, createModel } from '@/shared/lib';
-import { router } from '@/shared/routing';
+import { $locale } from '@/shared/i18n';
+import { createModel } from '@/shared/lib';
+import { localeSwitched, router } from '@/shared/routing';
 
 export const HeaderModel = createModel(() => {
   const menuToggled = createEvent();
@@ -30,7 +30,6 @@ export const HeaderModel = createModel(() => {
       sections: SiteModel.navigationQuery.$data,
       site: SiteModel.siteQuery.$data,
       cartCount: CartModel.$count,
-      hasHero: $hasHero,
       locale: $locale,
       isMenuOpen: $isMenuOpen,
       openSection: $openSection,

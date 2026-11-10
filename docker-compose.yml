@@ -35,6 +35,7 @@ services:
     volumes:
       - media:/app/media
 
+  # Витрина: SSR на Node (React + effector), данные берёт из CMS по внутренней сети.
   web:
     image: ${REGISTRY:-ghcr.io/olovyannikov}/muvna-web:${TAG:-latest}
     build:
@@ -44,15 +45,33 @@ services:
     depends_on:
       - cms
     environment:
+      PUBLIC_URL: ${PUBLIC_URL}
+      CMS_INTERNAL_URL: http://cms:3000
+      PORT: 3001
+
+  # Caddy: HTTPS (Let's Encrypt), /api и /admin — в CMS, остальное — в SSR витрины.
+  proxy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    depends_on:
+      - cms
+      - web
+    environment:
       # Домен (muvna.ru) — Caddy сам получит сертификат Let's Encrypt; «:80» — без HTTPS (по IP).
       SITE_ADDRESS: ${SITE_ADDRESS:-:80}
       PUBLIC_URL: ${PUBLIC_URL}
       # Например http://<IP> — запросы на него уйдут редиректом на PUBLIC_URL.
       REDIRECT_FROM: ${REDIRECT_FROM:-http://redirect.invalid}
+      # Адрес dev-стенда (deploy/dev.compose.yml), если он поднят на этой же машине.
+      DEV_SITE_ADDRESS: ${DEV_SITE_ADDRESS:-http://dev.invalid}
+    networks:
+      - default
+      - edge
     ports:
       - '80:80'
       - '443:443'
     volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
       - caddy-config:/config
 
@@ -73,6 +92,11 @@ services:
       SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
     volumes:
       - media:/app/media
+
+networks:
+  # Общая сеть прокси: через неё Caddy достаёт и до dev-стенда.
+  edge:
+    name: muvna-edge
 
 volumes:
   pgdata:

@@ -3,7 +3,7 @@ import { combine, sample } from 'effector';
 import { CartModel } from '@/entities/cart';
 
 import { $t } from '@/shared/i18n';
-import { createModel, setDocumentMetaFx } from '@/shared/lib';
+import { createModel, metaChanged } from '@/shared/lib';
 import { routes } from '@/shared/routing';
 
 import { CheckoutModel } from './checkout';
@@ -13,7 +13,7 @@ export const CartPageModel = createModel(() => {
     clock: routes.cart.opened,
     source: $t,
     fn: (t) => ({ title: t('cart.title') }),
-    target: setDocumentMetaFx,
+    target: metaChanged,
   });
 
   // Экран «спасибо за заказ» показываем, пока пользователь не ушёл со страницы.

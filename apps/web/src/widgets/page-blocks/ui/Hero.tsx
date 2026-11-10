@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import { useState } from 'react';
 
 import type { HeroBlock } from '@/shared/api';
-import { HeroGate } from '@/shared/lib';
 import { Autoplay, ButtonLink, Carousel, Fade, Image } from '@/shared/ui';
 
 import styles from './blocks.module.css';
@@ -17,9 +16,8 @@ export const Hero = ({ block, first }: { block: HeroBlock; first: boolean }) => 
   const many = slides.length > 1;
 
   return (
-    <section className={clsx(styles.hero, first && styles.heroFirst)}>
-      {/* Только первый экран страницы делает шапку прозрачной. */}
-      {first && <HeroGate />}
+    // data-hero-first: первый экран страницы — шапка над ним прозрачная (CSS :has, работает и при SSR).
+    <section className={clsx(styles.hero, first && styles.heroFirst)} data-hero-first={first || undefined}>
       <Carousel
         height="100%"
         withControls={false}

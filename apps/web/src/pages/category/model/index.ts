@@ -3,13 +3,15 @@ import { sample } from 'effector';
 import { attachToRoute, createQuery, keepFresh } from 'effector-refetch';
 
 import type { Category, Series } from '@/shared/api';
-import { $locale, type Locale } from '@/shared/i18n';
+import { $locale, $t, type Locale } from '@/shared/i18n';
 import {
   createModel,
   createPageStatus,
   createRetry,
+  isNotFound,
+  mediaUrl,
+  metaChanged,
   retryTransient,
-  setDocumentMetaFx,
   syncLivePreview,
 } from '@/shared/lib';
 import { routes } from '@/shared/routing';
@@ -20,6 +22,7 @@ type RouteParams = { section: string; category: string };
 
 export const CategoryModel = createModel(() => {
   const query = createQuery({
+    name: 'category',
     effect: fetchCategoryFx,
     source: { locale: $locale },
     mapParams: (params: RouteParams, { locale }: { locale: Locale }) => ({ ...params, locale }),
@@ -54,8 +57,17 @@ export const CategoryModel = createModel(() => {
     fn: ({ result: { category } }) => ({
       title: category.meta?.title || category.title,
       description: category.meta?.description,
+      image: mediaUrl(category.meta?.image ?? category.hero?.image, 'card'),
     }),
-    target: setDocumentMetaFx,
+    target: metaChanged,
+  });
+
+  sample({
+    clock: query.finished.fail,
+    source: $t,
+    filter: (_, { error }) => isNotFound(error),
+    fn: (t) => ({ title: t('errors.notFoundTitle') }),
+    target: metaChanged,
   });
 
   return {

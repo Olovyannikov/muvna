@@ -1,6 +1,6 @@
 import { RequestError } from 'effector-refetch';
 
-import { isPreview } from '../config';
+import { apiBase, isPreview } from '../config';
 import type { Locale } from '../i18n';
 
 type Primitive = string | number | boolean | null | undefined;
@@ -43,7 +43,7 @@ export const payloadRequest = async <T>(
     locale,
     ...(isPreview && method === 'GET' ? { draft: true } : {}),
   });
-  const response = await fetch(`/api${path}${search ? `?${search}` : ''}`, {
+  const response = await fetch(`${apiBase}${path}${search ? `?${search}` : ''}`, {
     method,
     signal,
     credentials: 'include',

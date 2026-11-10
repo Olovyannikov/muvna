@@ -1,13 +1,15 @@
 name: Deploy
 
-# Сборка образов в GHCR и выкладка на VPS по SSH.
-# Нужны секреты репозитория: VPS_HOST, VPS_USER, VPS_SSH_KEY (и при необходимости VPS_PORT).
+# Сборка образов в GHCR и выкладка на VPS по SSH:
+#   main    → прод   (~/muvna,     docker-compose.yml)
+#   develop → dev    (~/muvna-dev, deploy/dev.compose.yml)
+# Секреты репозитория: VPS_HOST, VPS_USER, VPS_SSH_KEY (и при необходимости VPS_PORT).
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   workflow_dispatch:
 
-concurrency: deploy
+concurrency: deploy-${{ github.ref_name }}
 
 permissions:
   contents: read
@@ -37,21 +39,24 @@ jobs:
           target: ${{ matrix.app == 'cms' && 'runner' || '' }}
           push: true
           tags: |
-            ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:${{ github.ref_name == 'main' && 'latest' || 'develop' }}
           cache-from: type=gha,scope=${{ matrix.app }}
           cache-to: type=gha,mode=max,scope=${{ matrix.app }}
 
   deploy:
     needs: images
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ github.ref_name == 'main' && 'production' || 'dev' }}
     env:
       VPS_HOST: ${{ secrets.VPS_HOST }}
+      DIR: ${{ github.ref_name == 'main' && 'muvna' || 'muvna-dev' }}
+      COMPOSE: ${{ github.ref_name == 'main' && 'docker-compose.yml' || 'deploy/dev.compose.yml' }}
+      PROJECT: ${{ github.ref_name == 'main' && 'muvna' || 'muvna-dev' }}
     steps:
       - uses: actions/checkout@v4
         if: env.VPS_HOST != ''
-      - name: Copy compose file
+      - name: Copy compose files and Caddyfile
         if: env.VPS_HOST != ''
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -59,8 +64,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
-          source: docker-compose.yml
-          target: muvna
+          source: docker-compose.yml,deploy/Caddyfile,deploy/dev.compose.yml
+          target: ${{ env.DIR }}
       - name: Pull & restart
         if: env.VPS_HOST != ''
         uses: appleboy/ssh-action@v1.2.0
@@ -69,15 +74,16 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
+          envs: DIR,COMPOSE,PROJECT
           script: |
             set -e
-            cd ~/muvna
+            cd ~/$DIR
             # Версия фиксируется в .env — ручной `docker compose up` не откатит деплой.
             sed -i "s/^TAG=.*/TAG=${{ github.sha }}/" .env
-            docker compose pull cms web
-            docker compose up -d --remove-orphans
+            docker compose -p $PROJECT -f $COMPOSE pull cms web
+            docker compose -p $PROJECT -f $COMPOSE up -d --remove-orphans
             docker image prune -f
-            docker compose ps
+            docker compose -p $PROJECT -f $COMPOSE ps
       - name: Skip (no VPS secrets)
         if: env.VPS_HOST == ''
         run: echo "VPS_HOST не задан — образы собраны, выкладка пропущена."

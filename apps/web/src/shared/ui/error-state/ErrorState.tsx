@@ -11,7 +11,8 @@ interface Props {
 }
 
 export const ErrorState = ({ code, title, text, children }: Props) => (
-  <section className={styles.root}>
+  // data-http-status: по нему SSR-сервер отдаёт код ответа 404.
+  <section className={styles.root} data-http-status={code === '404' ? '404' : undefined}>
     <Container narrow className={styles.inner}>
       {code && <p className={styles.code}>{code}</p>}
       <h1 className={styles.title}>{title}</h1>

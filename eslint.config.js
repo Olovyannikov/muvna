@@ -55,7 +55,7 @@ export default tseslint.config(
   },
   {
     // Mantine напрямую — только в shared/ui и в точке входа (CSS-слои после `@layer base, mantine`).
-    files: ['apps/web/src/shared/ui/**/*.{ts,tsx}', 'apps/web/src/app/index.tsx'],
+    files: ['apps/web/src/shared/ui/**/*.{ts,tsx}', 'apps/web/src/app/entry-client.tsx'],
     rules: { 'no-restricted-imports': 'off' },
   },
 );

@@ -1,8 +1,9 @@
 import { useUnit } from 'effector-react';
 import type { AnchorHTMLAttributes, MouseEvent } from 'react';
 
+import { $locale } from '../../i18n';
 import { isExternalHref, normalizeHref } from '../../lib';
-import { router } from '../../routing';
+import { router, stripLocale, withLocale } from '../../routing';
 
 type Props = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & { href: string | null | undefined };
 
@@ -11,9 +12,11 @@ type Props = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & { href: str
  * внешние и модифицированные клики (Cmd/Ctrl, средняя кнопка) — нативно.
  */
 export const AppLink = ({ href: rawHref, onClick, target, rel, ...props }: Props) => {
-  const navigate = useUnit(router.navigate);
-  const href = normalizeHref(rawHref);
-  const external = isExternalHref(href);
+  const { navigate, locale } = useUnit({ navigate: router.navigate, locale: $locale });
+  const normalized = normalizeHref(rawHref);
+  const external = isExternalHref(normalized);
+  // В разметке — путь с языковым префиксом (/en/...), чтобы ссылки работали без JS и индексировались.
+  const href = external || !normalized.startsWith('/') ? normalized : withLocale(normalized, locale);
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(event);
@@ -32,7 +35,8 @@ export const AppLink = ({ href: rawHref, onClick, target, rel, ...props }: Props
     }
     event.preventDefault();
     const url = new URL(href, window.location.origin);
-    navigate({ path: url.pathname });
+    // Роутер работает с путями без префикса — язык добавит адаптер истории.
+    navigate({ path: stripLocale(url.pathname) });
     if (url.hash) requestAnimationFrame(() => document.getElementById(url.hash.slice(1))?.scrollIntoView());
   };
 

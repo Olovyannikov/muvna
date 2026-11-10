@@ -7,4 +7,5 @@ export {
   type QueryParams,
   type QueryValue,
 } from './client';
+export { productCardSelect } from './select';
 export type * from './payload-types';

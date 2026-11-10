@@ -1,8 +1,11 @@
-import { createRoute, createRouter, historyAdapter, type RouterAdapter } from '@effector/router';
-import { sample } from 'effector';
-import { createBrowserHistory } from 'history';
+import { createRoute, createRouter } from '@effector/router';
+import { createEffect, createEvent, createStore, sample, scopeBind } from 'effector';
+import type { History } from 'history';
 
-import { appStarted } from '../lib/app';
+import { localeChanged, type Locale } from '../i18n';
+import { localeOf, localizedAdapter, stripLocale, withLocale } from './locale';
+
+export { localeOf, stripLocale, withLocale } from './locale';
 
 export const routes = {
   home: createRoute({ path: '/' }),
@@ -23,22 +26,42 @@ export const router = createRouter({
 });
 
 /**
- * Адаптер без нативной блокировки POP-переходов.
- *
- * В @effector/router 1.2.0 блокировщик после «разрешения» перехода делает
- * runWithoutBlocking(() => transition.retry()), но retry в history v5 — это асинхронный
- * history.go(): popstate приходит уже после повторной установки блока, и кнопка «назад»
- * зацикливается (URL мигает между страницами). Блокировка нужна только для beforeNavigate,
- * который мы не используем, а `block` в RouterAdapter опционален.
+ * Подключение истории: браузерной в клиенте, memory — на сервере (из URL запроса).
+ * Роутер получает адаптер без языкового префикса, язык берётся из URL.
  */
-const withoutNativeBlocking = (adapter: RouterAdapter): RouterAdapter => {
-  // Копируем дескрипторы, чтобы сохранить «живой» getter location.
-  const { block: _block, ...descriptors } = Object.getOwnPropertyDescriptors(adapter);
-  return Object.defineProperties({}, descriptors) as RouterAdapter;
-};
+export const historyAttached = createEvent<History>();
+
+const $history = createStore<History | null>(null, { serialize: 'ignore' }).on(
+  historyAttached,
+  (_, history) => history,
+);
+
+sample({ clock: historyAttached, fn: localizedAdapter, target: router.setHistory });
+sample({
+  clock: historyAttached,
+  fn: (history) => localeOf(history.location.pathname),
+  target: localeChanged,
+});
+
+// Язык меняется и при нативной навигации (назад с /en/... на /...).
+const listenLocaleFx = createEffect((history: History) => {
+  const changed = scopeBind(localeChanged, { safe: true });
+  history.listen(({ location }) => changed(localeOf(location.pathname)));
+});
+sample({ clock: historyAttached, target: listenLocaleFx });
+
+/** Переключение языка из UI: тот же путь под другим префиксом. */
+export const localeSwitched = createEvent<Locale>();
+
+const switchLocaleFx = createEffect(({ history, locale }: { history: History; locale: Locale }) => {
+  const { pathname, search, hash } = history.location;
+  history.push({ pathname: withLocale(stripLocale(pathname), locale), search, hash });
+});
 
 sample({
-  clock: appStarted,
-  fn: () => withoutNativeBlocking(historyAdapter(createBrowserHistory())),
-  target: router.setHistory,
+  clock: localeSwitched,
+  source: $history,
+  filter: (history: History | null): history is History => history !== null,
+  fn: (history, locale) => ({ history, locale }),
+  target: switchLocaleFx,
 });

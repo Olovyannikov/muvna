@@ -7,7 +7,7 @@ import { createModel, createPageStatus, createRetry } from '@/shared/lib';
 import { reservedSlugs, routes } from '@/shared/routing';
 
 export const ContentModel = createModel(() => {
-  const query = invoke(createPageModel);
+  const query = invoke(createPageModel, 'content');
 
   // /:slug перекрывается со статичными маршрутами (/cart) — их в CMS не запрашиваем.
   sample({
