@@ -28,3 +28,9 @@
 		-Server
 	}
 }
+
+# Редирект со старого/служебного адреса (например, голого IP) на основной.
+# По умолчанию — заглушка, которая ни с чем не совпадает.
+{$REDIRECT_FROM:http://redirect.invalid} {
+	redir {$PUBLIC_URL:https://muvna.ru}{uri} permanent
+}

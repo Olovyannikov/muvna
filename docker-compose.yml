@@ -46,6 +46,9 @@ services:
     environment:
       # Домен (muvna.ru) — Caddy сам получит сертификат Let's Encrypt; «:80» — без HTTPS (по IP).
       SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      PUBLIC_URL: ${PUBLIC_URL}
+      # Например http://<IP> — запросы на него уйдут редиректом на PUBLIC_URL.
+      REDIRECT_FROM: ${REDIRECT_FROM:-http://redirect.invalid}
     ports:
       - '80:80'
       - '443:443'
