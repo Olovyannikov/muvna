@@ -3,7 +3,7 @@ import { sample } from 'effector';
 
 import { createPageModel } from '@/entities/page';
 
-import { createModel, createRetry } from '@/shared/lib';
+import { createModel, createPageStatus, createRetry } from '@/shared/lib';
 import { routes } from '@/shared/routing';
 
 export const HomeModel = createModel(() => {
@@ -13,9 +13,8 @@ export const HomeModel = createModel(() => {
 
   return {
     viewModel: {
+      status: createPageStatus(query),
       page: query.$data,
-      error: query.$error,
-      isLoading: query.$isInitialLoading,
       onRetryClick: createRetry(query),
     },
   };

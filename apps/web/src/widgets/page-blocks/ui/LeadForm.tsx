@@ -1,7 +1,8 @@
+import { reflect } from '@effector/reflect';
 import type { FormEvent } from 'react';
 
 import { useT } from '@/shared/i18n';
-import { useViewModel } from '@/shared/lib';
+import type { Errors } from '@/shared/lib';
 import { Button, TextAreaField, TextField } from '@/shared/ui';
 
 import { LeadFormModel, type LeadValues } from '../model';
@@ -10,12 +11,27 @@ import styles from './LeadForm.module.css';
 interface Props {
   submitLabel?: string | null;
   successMessage?: string | null;
+  values: LeadValues;
+  errors: Errors<LeadValues>;
+  pending: boolean;
+  isSent: boolean;
+  submitFailed: boolean;
+  onFieldChange: (change: { name: keyof LeadValues; value: string }) => void;
+  onSubmit: () => void;
 }
 
-export const LeadForm = ({ submitLabel, successMessage }: Props) => {
+const LeadFormView = ({
+  submitLabel,
+  successMessage,
+  values,
+  errors,
+  pending,
+  isSent,
+  submitFailed,
+  onFieldChange,
+  onSubmit,
+}: Props) => {
   const t = useT();
-  const { values, errors, pending, isSent, submitFailed, onFieldChange, onSubmit } =
-    useViewModel(LeadFormModel);
 
   if (isSent) {
     return (
@@ -64,3 +80,5 @@ export const LeadForm = ({ submitLabel, successMessage }: Props) => {
     </form>
   );
 };
+
+export const LeadForm = reflect({ view: LeadFormView, bind: LeadFormModel.viewModel });

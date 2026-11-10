@@ -1,18 +1,25 @@
+import { reflect } from '@effector/reflect';
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 
 import { CartModel } from '@/entities/cart';
 
 import { useT } from '@/shared/i18n';
-import { formatPrice, useViewModel } from '@/shared/lib';
+import { formatPrice } from '@/shared/lib';
 import { Button, ButtonLink, CloseIcon } from '@/shared/ui';
 
 import styles from './CartDrawer.module.css';
 import { CartLines } from './CartLines';
 
-export const CartDrawer = () => {
+interface Props {
+  open: boolean;
+  empty: boolean;
+  total: number;
+  close: () => void;
+}
+
+const CartDrawerView = ({ open, empty, total, close }: Props) => {
   const t = useT();
-  const { isDrawerOpen: open, onCartClose: close, isEmpty: empty, total } = useViewModel(CartModel);
   const panel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,3 +81,13 @@ export const CartDrawer = () => {
     </div>
   );
 };
+
+export const CartDrawer = reflect({
+  view: CartDrawerView,
+  bind: {
+    open: CartModel.viewModel.isDrawerOpen,
+    empty: CartModel.viewModel.isEmpty,
+    total: CartModel.viewModel.total,
+    close: CartModel.viewModel.onCartClose,
+  },
+});

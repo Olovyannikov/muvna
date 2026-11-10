@@ -8,4 +8,4 @@ export { Skeleton } from './skeleton/Skeleton';
 export { SectionHeading } from './section-heading/SectionHeading';
 export * from './icons';
 export { ErrorState } from './error-state/ErrorState';
-export { QueryBoundary, PageSkeleton } from './query-boundary/QueryBoundary';
+export { createPageView, PageSkeleton, NotFoundState } from './page-view/PageView';

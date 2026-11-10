@@ -6,7 +6,14 @@ import { fetchProductFx } from '@/entities/product';
 
 import type { Product } from '@/shared/api';
 import { $locale, type Locale } from '@/shared/i18n';
-import { createModel, createRetry, retryTransient, setDocumentMetaFx, syncLivePreview } from '@/shared/lib';
+import {
+  createModel,
+  createPageStatus,
+  createRetry,
+  retryTransient,
+  setDocumentMetaFx,
+  syncLivePreview,
+} from '@/shared/lib';
 import { routes } from '@/shared/routing';
 
 type RouteParams = { section: string; category: string; product: string };
@@ -54,9 +61,8 @@ export const ProductModel = createModel(() => {
 
   return {
     viewModel: {
+      status: createPageStatus(query),
       product: query.$data,
-      error: query.$error,
-      isLoading: query.$isInitialLoading,
       href: routes.product.$params.map(
         ({ section, category, product }) => `/${section}/${category}/${product}`,
       ),

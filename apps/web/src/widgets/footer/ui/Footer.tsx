@@ -1,7 +1,9 @@
-import { SiteModel } from '@/entities/site';
+import { reflect } from '@effector/reflect';
 
+import { SiteModel, type NavSection } from '@/entities/site';
+
+import type { Site } from '@/shared/api';
 import { useT } from '@/shared/i18n';
-import { useViewModel } from '@/shared/lib';
 import { AppLink, Container, LinkIcon, TelegramIcon, VkIcon, YoutubeIcon } from '@/shared/ui';
 
 import styles from './Footer.module.css';
@@ -9,9 +11,8 @@ import styles from './Footer.module.css';
 const socialIcons = { telegram: TelegramIcon, vk: VkIcon, youtube: YoutubeIcon, other: LinkIcon };
 const socialNames = { telegram: 'Telegram', vk: 'VK', youtube: 'YouTube', other: 'Link' };
 
-export const Footer = () => {
+const FooterView = ({ site, sections }: { site: Site | null; sections: NavSection[] | null }) => {
   const t = useT();
-  const { site, sections } = useViewModel(SiteModel);
   const year = new Date().getFullYear();
 
   return (
@@ -94,3 +95,5 @@ export const Footer = () => {
     </footer>
   );
 };
+
+export const Footer = reflect({ view: FooterView, bind: SiteModel.viewModel });

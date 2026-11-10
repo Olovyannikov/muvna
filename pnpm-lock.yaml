@@ -102,6 +102,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@effector/reflect':
+        specifier: ^10.1.1
+        version: 10.1.1(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6)
       '@effector/router':
         specifier: ^1.2.0
         version: 1.2.0(effector-action@1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4)))(effector@23.4.4)(patronum@2.3.0(effector@23.4.4))(query-string@9.5.1)(zod@4.6.7)
@@ -355,6 +358,13 @@ packages:
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
+
+  '@effector/reflect@10.1.1':
+    resolution: {integrity: sha512-yN1sbOQa43qCK6u6lkn7BjiAEzRshoLgMCDTGtkLZdPhVITCqzqcm/7aZfB0IP453fV/Hl3s23j94nOQZItG2g==}
+    peerDependencies:
+      effector: ^23.1.0
+      effector-react: ^23.1.0
+      react: '>=16.8.0 <20.0.0'
 
   '@effector/router-paths@1.1.0':
     resolution: {integrity: sha512-XVjmLLkPM12m32JV4GyQvxp8ODsEUW49q7oaT+9BtRedbXTsiDzCkoQwugnntABiMKwl/y7ucVH96m/kdB3HQA==}
@@ -4124,6 +4134,12 @@ snapshots:
       tslib: 2.9.1
 
   '@drizzle-team/brocli@0.10.2': {}
+
+  '@effector/reflect@10.1.1(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6)':
+    dependencies:
+      effector: 23.4.4
+      effector-react: 23.3.0(effector@23.4.4)(react@19.2.6)
+      react: 19.2.6
 
   '@effector/router-paths@1.1.0': {}
 

@@ -1,8 +1,11 @@
+import { reflect } from '@effector/reflect';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
+import type { NavSection } from '@/entities/site';
+
+import type { Site } from '@/shared/api';
 import { useT } from '@/shared/i18n';
-import { useViewModel } from '@/shared/lib';
 import { AppLink, BagIcon, CloseIcon, MenuIcon } from '@/shared/ui';
 
 import { HeaderModel } from '../model';
@@ -21,20 +24,33 @@ const useScrolled = () => {
   return scrolled;
 };
 
-export const Header = () => {
-  const {
-    sections,
-    site,
-    cartCount,
-    hasHero,
-    isMenuOpen: menuOpen,
-    openSection,
-    onMenuToggle,
-    onSectionHover,
-    onSectionClick,
-    onMegaMenuLeave,
-    onCartClick,
-  } = useViewModel(HeaderModel);
+interface Props {
+  sections: NavSection[] | null;
+  site: Site | null;
+  cartCount: number;
+  hasHero: boolean;
+  isMenuOpen: boolean;
+  openSection: number | null;
+  onMenuToggle: () => void;
+  onSectionHover: (id: number) => void;
+  onSectionClick: (id: number) => void;
+  onMegaMenuLeave: () => void;
+  onCartClick: () => void;
+}
+
+const HeaderView = ({
+  sections,
+  site,
+  cartCount,
+  hasHero,
+  isMenuOpen: menuOpen,
+  openSection,
+  onMenuToggle,
+  onSectionHover,
+  onSectionClick,
+  onMegaMenuLeave,
+  onCartClick,
+}: Props) => {
   const t = useT();
   const scrolled = useScrolled();
   useEffect(() => {
@@ -148,3 +164,5 @@ export const Header = () => {
     </>
   );
 };
+
+export const Header = reflect({ view: HeaderView, bind: HeaderModel.viewModel });

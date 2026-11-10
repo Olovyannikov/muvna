@@ -1,3 +1,4 @@
+import { reflect } from '@effector/reflect';
 import clsx from 'clsx';
 
 import { AddToCartButton } from '@/features/add-to-cart';
@@ -7,8 +8,8 @@ import { productCategory, productSection } from '@/entities/product';
 
 import type { Media, Product } from '@/shared/api';
 import { useT } from '@/shared/i18n';
-import { formatPrice, useViewModel } from '@/shared/lib';
-import { AppLink, Container, Image, QueryBoundary, RichText, type LexicalState } from '@/shared/ui';
+import { formatPrice } from '@/shared/lib';
+import { AppLink, Container, createPageView, Image, RichText, type LexicalState } from '@/shared/ui';
 
 import { ProductModel } from '../model';
 import styles from './ProductPage.module.css';
@@ -18,8 +19,13 @@ const imagesOf = (product: Product): (number | Media)[] => [
   ...(product.gallery ?? []).map((item) => item.image).filter((image) => image !== product.image),
 ];
 
-const Gallery = ({ product }: { product: Product }) => {
-  const { activeImage: active, onImageSelect } = useViewModel(ProductModel);
+interface GalleryProps {
+  product: Product;
+  active: number;
+  onImageSelect: (index: number) => void;
+}
+
+const GalleryView = ({ product, active, onImageSelect }: GalleryProps) => {
   const images = imagesOf(product);
   return (
     <div className={styles.gallery}>
@@ -54,9 +60,15 @@ const Gallery = ({ product }: { product: Product }) => {
   );
 };
 
-const ProductDetails = ({ product, href }: { product: Product; href: string }) => {
+interface DetailsProps {
+  product: Product;
+  href: string;
+  quantity: number;
+  onQuantityChange: (quantity: number) => void;
+}
+
+const DetailsView = ({ product, href, quantity, onQuantityChange }: DetailsProps) => {
   const t = useT();
-  const { quantity, onQuantityChange } = useViewModel(ProductModel);
   const category = productCategory(product);
   const section = productSection(product);
   const series = typeof product.series === 'object' ? product.series : null;
@@ -109,26 +121,41 @@ const ProductDetails = ({ product, href }: { product: Product; href: string }) =
   );
 };
 
-export const ProductPage = () => {
-  const t = useT();
-  const { product: data, error, isLoading, href, onRetryClick } = useViewModel(ProductModel);
+const Gallery = reflect({
+  view: GalleryView,
+  bind: { active: ProductModel.viewModel.activeImage, onImageSelect: ProductModel.viewModel.onImageSelect },
+});
 
+const Details = reflect({
+  view: DetailsView,
+  bind: {
+    href: ProductModel.viewModel.href,
+    quantity: ProductModel.viewModel.quantity,
+    onQuantityChange: ProductModel.viewModel.onQuantityChange,
+  },
+});
+
+const ProductView = ({ product }: { product: Product | null }) => {
+  const t = useT();
+  if (!product) return null;
   return (
-    <QueryBoundary loading={isLoading} error={data ? null : error} onRetry={onRetryClick}>
-      {data && (
-        <article>
-          <Container className={styles.layout}>
-            <Gallery product={data} />
-            <ProductDetails product={data} href={href} />
-          </Container>
-          {data.details && (
-            <Container narrow className={styles.description}>
-              <h2 className={styles.sectionTitle}>{t('product.details')}</h2>
-              <RichText value={data.details as LexicalState} />
-            </Container>
-          )}
-        </article>
+    <article>
+      <Container className={styles.layout}>
+        <Gallery product={product} />
+        <Details product={product} />
+      </Container>
+      {product.details && (
+        <Container narrow className={styles.description}>
+          <h2 className={styles.sectionTitle}>{t('product.details')}</h2>
+          <RichText value={product.details as LexicalState} />
+        </Container>
       )}
-    </QueryBoundary>
+    </article>
   );
 };
+
+export const ProductPage = createPageView({
+  status: ProductModel.viewModel.status,
+  onRetry: ProductModel.viewModel.onRetryClick,
+  ready: reflect({ view: ProductView, bind: { product: ProductModel.viewModel.product } }),
+});

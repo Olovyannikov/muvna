@@ -1,29 +1,30 @@
-import clsx from 'clsx';
+import { reflect } from '@effector/reflect';
 
 import { PageBlocks } from '@/widgets/page-blocks';
 
-import { useViewModel } from '@/shared/lib';
-import { Container, QueryBoundary } from '@/shared/ui';
+import type { Page } from '@/shared/api';
+import { Container, createPageView } from '@/shared/ui';
 
 import { ContentModel } from '../model';
 import styles from './ContentPage.module.css';
 
-export const ContentPage = () => {
-  const { page: data, error, isLoading, onRetryClick } = useViewModel(ContentModel);
-  const startsWithHero = data?.layout?.[0]?.blockType === 'hero';
-
+const ContentView = ({ page }: { page: Page | null }) => {
+  if (!page) return null;
+  const startsWithHero = page.layout?.[0]?.blockType === 'hero';
   return (
-    <QueryBoundary loading={isLoading} error={data ? null : error} onRetry={onRetryClick}>
-      {data && (
-        <article>
-          {!startsWithHero && (
-            <Container className={clsx(styles.head)}>
-              <h1 className={styles.title}>{data.title}</h1>
-            </Container>
-          )}
-          <PageBlocks blocks={data.layout} />
-        </article>
+    <article>
+      {!startsWithHero && (
+        <Container className={styles.head}>
+          <h1 className={styles.title}>{page.title}</h1>
+        </Container>
       )}
-    </QueryBoundary>
+      <PageBlocks blocks={page.layout} />
+    </article>
   );
 };
+
+export const ContentPage = createPageView({
+  status: ContentModel.viewModel.status,
+  onRetry: ContentModel.viewModel.onRetryClick,
+  ready: reflect({ view: ContentView, bind: { page: ContentModel.viewModel.page } }),
+});

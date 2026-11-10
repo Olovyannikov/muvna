@@ -3,7 +3,7 @@ import { sample } from 'effector';
 
 import { createPageModel } from '@/entities/page';
 
-import { createModel, createRetry } from '@/shared/lib';
+import { createModel, createPageStatus, createRetry } from '@/shared/lib';
 import { reservedSlugs, routes } from '@/shared/routing';
 
 export const ContentModel = createModel(() => {
@@ -21,9 +21,8 @@ export const ContentModel = createModel(() => {
 
   return {
     viewModel: {
+      status: createPageStatus(query),
       page: query.$data,
-      error: query.$error,
-      isLoading: query.$isInitialLoading,
       onRetryClick: createRetry(query),
     },
   };

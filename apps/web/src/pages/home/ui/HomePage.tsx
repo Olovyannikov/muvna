@@ -1,15 +1,19 @@
+import { reflect } from '@effector/reflect';
+
 import { PageBlocks } from '@/widgets/page-blocks';
 
-import { useViewModel } from '@/shared/lib';
-import { QueryBoundary } from '@/shared/ui';
+import type { Page } from '@/shared/api';
+import { createPageView } from '@/shared/ui';
 
 import { HomeModel } from '../model';
 
-export const HomePage = () => {
-  const { page, error, isLoading, onRetryClick } = useViewModel(HomeModel);
-  return (
-    <QueryBoundary loading={isLoading} error={page ? null : error} onRetry={onRetryClick}>
-      <PageBlocks blocks={page?.layout} />
-    </QueryBoundary>
-  );
-};
+const HomeContent = reflect({
+  view: ({ page }: { page: Page | null }) => <PageBlocks blocks={page?.layout} />,
+  bind: { page: HomeModel.viewModel.page },
+});
+
+export const HomePage = createPageView({
+  status: HomeModel.viewModel.status,
+  onRetry: HomeModel.viewModel.onRetryClick,
+  ready: HomeContent,
+});

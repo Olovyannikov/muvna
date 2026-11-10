@@ -41,7 +41,7 @@ FSD: `app → pages → widgets → features → entities → shared`, импо�
 Вся логика живёт в effector, UI ничего не решает сам:
 
 - Приложение работает в `fork()`-скоупе (`<Provider value={scope}>`). Старт идёт через `allSettled(appStarted, { scope })`. Внешние колбэки (`postMessage` Live Preview) привязаны через `scopeBind`, корзина восстанавливается из localStorage через `persist({ pickup: appStarted })`.
-- Модели — это namespace на `createModel` поверх `@withease/factories`. UI видит только `viewModel`: сторы для чтения и обработчики `onXxx`. Остальное — API для других моделей.
+- Модели — это namespace на `createModel` поверх `@withease/factories`. UI видит только `viewModel`: сторы для чтения и обработчики `onXxx`, связанные с view через [`@effector/reflect`](https://github.com/effector/reflect) (`reflect`, `variant` для состояний страницы, `list`). Остальное — API для других моделей.
 
   ```ts
   export const CartModel = createModel(() => {
@@ -52,7 +52,7 @@ FSD: `app → pages → widgets → features → entities → shared`, импо�
     };
   });
 
-  const { items, total, onRemoveClick } = useViewModel(CartModel);
+  export const CartSummary = reflect({ view: CartSummaryView, bind: CartModel.viewModel });
   ```
 
 - Данные из CMS загружаются через [effector-refetch](https://github.com/Olovyannikov/effector-refetch). Запросы привязаны к маршрутам `@effector/router` (`attachToRoute`), язык подставляется через `source: { locale: $locale }`, при смене языка срабатывает `keepFresh`.

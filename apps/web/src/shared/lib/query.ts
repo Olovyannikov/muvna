@@ -1,4 +1,4 @@
-import { createEvent, sample, type EventCallable, type Store } from 'effector';
+import { combine, createEvent, sample, type EventCallable, type Store } from 'effector';
 import { isHttpError } from 'effector-refetch';
 
 /** Сетевые сбои повторяем, а 4xx (например, 404 «нет такой страницы») — нет. */
@@ -21,3 +21,17 @@ export const createRetry = <P>(query: { $params: Store<P | null>; refresh: Event
   });
   return retryClicked;
 };
+
+export type PageStatus = 'loading' | 'notFound' | 'error' | 'ready';
+
+/** Состояние страницы для `variant`: данные есть → ready, иначе загрузка / 404 / ошибка. */
+export const createPageStatus = (query: {
+  $data: Store<unknown>;
+  $error: Store<unknown>;
+  $pending: Store<boolean>;
+}) =>
+  combine(query.$data, query.$error, query.$pending, (data, error, pending): PageStatus => {
+    if (data) return 'ready';
+    if (pending || !error) return 'loading';
+    return isNotFound(error) ? 'notFound' : 'error';
+  });

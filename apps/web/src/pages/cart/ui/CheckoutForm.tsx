@@ -1,7 +1,8 @@
+import { reflect } from '@effector/reflect';
 import type { FormEvent } from 'react';
 
 import { useT } from '@/shared/i18n';
-import { useViewModel } from '@/shared/lib';
+import type { Errors } from '@/shared/lib';
 import { AppLink, Button, TextAreaField, TextField } from '@/shared/ui';
 
 import { CheckoutModel, type CheckoutValues } from '../model/checkout';
@@ -9,9 +10,17 @@ import styles from './CheckoutForm.module.css';
 
 type Field = keyof CheckoutValues;
 
-export const CheckoutForm = () => {
+interface Props {
+  values: CheckoutValues;
+  errors: Errors<CheckoutValues>;
+  pending: boolean;
+  submitError: { message: string | null } | null;
+  onFieldChange: (change: { name: keyof CheckoutValues; value: string }) => void;
+  onSubmit: () => void;
+}
+
+const CheckoutFormView = ({ values, errors, pending, submitError, onFieldChange, onSubmit }: Props) => {
   const t = useT();
-  const { values, errors, pending, submitError, onFieldChange, onSubmit } = useViewModel(CheckoutModel);
 
   const bind = (name: Field) => ({
     name,
@@ -66,3 +75,5 @@ export const CheckoutForm = () => {
     </form>
   );
 };
+
+export const CheckoutForm = reflect({ view: CheckoutFormView, bind: CheckoutModel.viewModel });

@@ -4,7 +4,14 @@ import { attachToRoute, createQuery, keepFresh } from 'effector-refetch';
 
 import type { Category, Series } from '@/shared/api';
 import { $locale, type Locale } from '@/shared/i18n';
-import { createModel, createRetry, retryTransient, setDocumentMetaFx, syncLivePreview } from '@/shared/lib';
+import {
+  createModel,
+  createPageStatus,
+  createRetry,
+  retryTransient,
+  setDocumentMetaFx,
+  syncLivePreview,
+} from '@/shared/lib';
 import { routes } from '@/shared/routing';
 
 import { fetchCategoryFx, type CategoryView } from '../api';
@@ -53,9 +60,9 @@ export const CategoryModel = createModel(() => {
 
   return {
     viewModel: {
-      view: query.$data,
-      error: query.$error,
-      isLoading: query.$isInitialLoading,
+      status: createPageStatus(query),
+      category: query.$data.map((view) => view?.category ?? null),
+      groups: query.$data.map((view) => view?.groups ?? []),
       basePath: routes.category.$params.map(({ section, category }) => `/${section}/${category}`),
       onRetryClick: createRetry(query),
     },

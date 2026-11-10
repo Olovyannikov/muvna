@@ -1,6 +1,6 @@
 export { appStarted } from './app';
-export { createModel, useViewModel, type ViewModel } from './model';
-export { retryTransient, isNotFound, createRetry } from './query';
+export { createModel, type ViewModel } from './model';
+export { retryTransient, isNotFound, createRetry, createPageStatus, type PageStatus } from './query';
 export { formatPrice, pluralize } from './format';
 export { asMedia, mediaUrl, mediaSrcSet } from './media';
 export { setDocumentMetaFx, type DocumentMeta } from './document';

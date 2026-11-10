@@ -1,6 +1,10 @@
+import { reflect } from '@effector/reflect';
+
+import type { CartItem } from '@/entities/cart';
+
 import type { Product } from '@/shared/api';
 import { useT } from '@/shared/i18n';
-import { mediaUrl, useViewModel } from '@/shared/lib';
+import { mediaUrl } from '@/shared/lib';
 import { Button } from '@/shared/ui';
 
 import { AddToCartModel } from '../model';
@@ -11,10 +15,10 @@ interface Props {
   quantity?: number;
   size?: 'default' | 'small';
   block?: boolean;
+  onAddClick: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
 }
 
-export const AddToCartButton = ({ product, href, quantity, size = 'small', block }: Props) => {
-  const { onAddClick } = useViewModel(AddToCartModel);
+const AddToCartButtonView = ({ product, href, quantity, size = 'small', block, onAddClick }: Props) => {
   const t = useT();
   const unavailable = product.inStock === false;
   return (
@@ -38,3 +42,5 @@ export const AddToCartButton = ({ product, href, quantity, size = 'small', block
     </Button>
   );
 };
+
+export const AddToCartButton = reflect({ view: AddToCartButtonView, bind: AddToCartModel.viewModel });
