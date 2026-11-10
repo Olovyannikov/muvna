@@ -38,8 +38,7 @@ writeFileSync(
       handler: 'index.mjs',
       launcherType: 'Nodejs',
       maxDuration: 30,
-      // Франкфурт — ближе всего к CMS в Москве: каждый рендер ходит туда за данными.
-      regions: ['fra1'],
+      // регион функции (fra1) задаётся на уровне проекта — см. .github/workflows/vercel.yml
     },
     null,
     2,

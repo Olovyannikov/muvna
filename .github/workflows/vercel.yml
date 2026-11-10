@@ -20,6 +20,7 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       SCOPE: ${{ secrets.VERCEL_SCOPE && format('--scope {0}', secrets.VERCEL_SCOPE) || '' }}
       PROD: ${{ github.event_name == 'push' && '--prod' || '' }}
+      VERCEL_SCOPE: ${{ secrets.VERCEL_SCOPE }}
     steps:
       - name: Skip (no VERCEL_TOKEN)
         if: env.VERCEL_TOKEN == ''
@@ -43,6 +44,12 @@ jobs:
         working-directory: apps/web
         timeout-minutes: 5
         run: |
+          # Франкфурт — ближе всего к CMS в Москве: каждый рендер ходит туда за данными.
+          # (regions в .vc-config.json подвешивает сборку на Vercel — задаём на проекте)
+          curl -sf -X PATCH "https://api.vercel.com/v9/projects/muvna-dev${VERCEL_SCOPE:+?slug=$VERCEL_SCOPE}" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' \
+            -d '{"serverlessFunctionRegion":"fra1"}' -o /dev/null \
+            && echo "function region: fra1" || echo "::warning::не удалось задать регион функции fra1"
           npx --yes vercel@65 link --yes --project muvna-dev --token "$VERCEL_TOKEN" $SCOPE
           URL=$(npx --yes vercel@65 deploy --prebuilt $PROD --token "$VERCEL_TOKEN" $SCOPE)
           echo "### Vercel: $URL" >> "$GITHUB_STEP_SUMMARY"
