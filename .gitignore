@@ -18,3 +18,6 @@ test-results
 
 # Временные файлы апскейла картинок
 .upscaled
+
+# Сборка для Vercel
+.vercel

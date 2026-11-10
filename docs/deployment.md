@@ -14,6 +14,15 @@
 
 Пуш в `main` выкатывается на прод, пуш в `develop` — на dev (workflow `.github/workflows/deploy.yml`, около 2 минут). Логины в админку прода и dev разные, их выдаёт владелец проекта.
 
+## Витрина dev на Vercel
+
+Помимо ВМ, витрину dev можно держать на Vercel: статика на их CDN, SSR в Vercel Function. Контент берётся из **dev-CMS на ВМ**, админка на Vercel не разворачивается.
+
+- **Сборка:** `pnpm --filter @muvna/web build:vercel` → `apps/web/.vercel/output` (Build Output API v3). SSR-бандл самодостаточный (`ssr.noExternal`), функция — `apps/web/vercel/render.mjs`.
+- **Маршруты:** сначала файлы, затем `/api/*` — прокси в `https://dev.168-113-255-143.sslip.io/api/*` (заказы и заявки попадают в dev-CMS), всё остальное — SSR. Сайт закрыт от индексации (`X-Robots-Tag` и `robots.txt`).
+- **Деплой:** `.github/workflows/vercel.yml`. Пуш в `develop` обновляет основной адрес проекта `muvna-dev`, каждый PR получает свой preview-адрес (ссылка в summary джоба). Нужен секрет репозитория `VERCEL_TOKEN` (vercel.com/account/tokens), для командного аккаунта ещё `VERCEL_SCOPE` (slug команды). Без токена workflow пропускается.
+- **Ограничения:** черновики и Live Preview на Vercel не работают — cookie редактора живёт на домене CMS. Preview-деплои Vercel по умолчанию закрыты логином Vercel.
+
 ## Что запущено на сервере
 
 ```

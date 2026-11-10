@@ -32,6 +32,7 @@ const createInstanceFx = attach({
       resources: { ru: { translation: ru }, en: { translation: en } },
       interpolation: { escapeValue: false },
       returnNull: false,
+      showSupportNotice: false,
     });
     return instance;
   },

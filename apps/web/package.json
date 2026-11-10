@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "lint:fsd": "steiger ./src",
     "test": "vitest run",
-    "start": "NODE_ENV=production node server.mjs"
+    "start": "NODE_ENV=production node server.mjs",
+    "build:vercel": "node scripts/build-vercel.mjs"
   },
   "dependencies": {
     "@effector/reflect": "^10.1.1",

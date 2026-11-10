@@ -12,5 +12,7 @@ export default defineConfig({
     // API, медиа и админка живут в CMS — в проде это тот же домен (Caddy), в dev проксируем.
     proxy: { '/api': cms },
   },
+  // Для Vercel SSR-бандл самодостаточный: зависимости внутри, node_modules функции не нужны.
+  ssr: process.env.SSR_BUNDLE_DEPS === '1' ? { noExternal: true, target: 'node' } : undefined,
   test: { environment: 'jsdom', globals: false },
 });

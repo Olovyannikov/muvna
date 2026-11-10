@@ -9,6 +9,7 @@ export default tseslint.config(
     ignores: [
       '**/dist/**',
       '**/.next/**',
+      '**/.vercel/**',
       '**/node_modules/**',
       '**/payload-types.ts',
       'apps/cms/src/app/(payload)/**',

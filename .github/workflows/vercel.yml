@@ -1,0 +1,47 @@
+name: Vercel (dev)
+
+# Витрина на Vercel поверх dev-CMS на ВМ (админка на Vercel не нужна):
+#   push develop  → прод-деплой проекта muvna-dev (https://muvna-dev.vercel.app)
+#   pull request  → preview-деплой с отдельным адресом (ссылка в summary джоба)
+# Нужен секрет VERCEL_TOKEN (vercel.com/account/tokens); VERCEL_SCOPE — slug команды, если проект не личный.
+on:
+  push:
+    branches: [develop]
+  pull_request:
+  workflow_dispatch:
+
+concurrency: vercel-${{ github.ref }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      SCOPE: ${{ secrets.VERCEL_SCOPE && format('--scope {0}', secrets.VERCEL_SCOPE) || '' }}
+      PROD: ${{ github.event_name == 'push' && '--prod' || '' }}
+    steps:
+      - name: Skip (no VERCEL_TOKEN)
+        if: env.VERCEL_TOKEN == ''
+        run: echo "VERCEL_TOKEN не задан — деплой на Vercel пропущен."
+      - uses: actions/checkout@v4
+        if: env.VERCEL_TOKEN != ''
+      - uses: pnpm/action-setup@v4
+        if: env.VERCEL_TOKEN != ''
+      - uses: actions/setup-node@v4
+        if: env.VERCEL_TOKEN != ''
+        with:
+          node-version: 24
+          cache: pnpm
+      - if: env.VERCEL_TOKEN != ''
+        run: pnpm install --frozen-lockfile
+      - name: Build (Build Output API)
+        if: env.VERCEL_TOKEN != ''
+        run: pnpm --filter @muvna/web build:vercel
+      - name: Link project and deploy
+        if: env.VERCEL_TOKEN != ''
+        working-directory: apps/web
+        run: |
+          npx --yes vercel@65 link --yes --project muvna-dev --token "$VERCEL_TOKEN" $SCOPE
+          URL=$(npx --yes vercel@65 deploy --prebuilt $PROD --token "$VERCEL_TOKEN" $SCOPE)
+          echo "### Vercel: $URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "Deployed: $URL"

@@ -11,7 +11,10 @@ export const isPreview = !isServer && new URLSearchParams(window.location.search
 
 /** Публичный origin сайта: на сервере — из PUBLIC_URL, в браузере — текущий. */
 export const siteOrigin: string = isServer
-  ? (serverEnv('PUBLIC_URL') ?? 'http://localhost:5173').replace(/\/$/, '')
+  ? (
+      serverEnv('PUBLIC_URL') ??
+      (serverEnv('VERCEL_URL') ? `https://${serverEnv('VERCEL_URL')}` : 'http://localhost:5173')
+    ).replace(/\/$/, '')
   : window.location.origin;
 
 /** Origin админки Payload: из него приходят postMessage Live Preview. */

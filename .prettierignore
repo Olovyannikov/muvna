@@ -5,3 +5,4 @@ apps/cms/src/migrations
 apps/cms/src/seed/data
 dist
 .next
+.vercel
