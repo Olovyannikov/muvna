@@ -26,6 +26,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    # Уникальное имя для прокси: у dev-стенда в общей сети muvna-edge тоже есть сервис «cms».
+    networks:
+      default:
+        aliases: [prod-cms]
     environment: &cms-env
       DATABASE_URL: postgres://${POSTGRES_USER:-muvna}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-muvna}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:?задайте PAYLOAD_SECRET в .env}
@@ -44,6 +48,9 @@ services:
     restart: unless-stopped
     depends_on:
       - cms
+    networks:
+      default:
+        aliases: [prod-web]
     environment:
       PUBLIC_URL: ${PUBLIC_URL}
       CMS_INTERNAL_URL: http://cms:3000
@@ -70,8 +77,10 @@ services:
     ports:
       - '80:80'
       - '443:443'
+    # Каталог, а не файл: деплой подменяет Caddyfile, одиночный bind mount остался бы на старой версии.
+    command: caddy run --config /etc/caddy-conf/Caddyfile --adapter caddyfile
     volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./deploy:/etc/caddy-conf:ro
       - caddy-data:/data
       - caddy-config:/config
 

@@ -4,12 +4,13 @@
 	# Payload: REST API, медиа, админка и её статика
 	@cms path /api/* /admin /admin/* /_next/*
 	handle @cms {
-		reverse_proxy {$CMS_UPSTREAM:cms:3000}
+		# Уникальные имена prod-*: прокси сидит и в сети dev-стенда, где тоже есть «cms»/«web».
+		reverse_proxy {$CMS_UPSTREAM:prod-cms:3000}
 	}
 
 	# Витрина: SSR на Node (ассеты, sitemap.xml, robots.txt — там же)
 	handle {
-		reverse_proxy {$WEB_UPSTREAM:web:3001}
+		reverse_proxy {$WEB_UPSTREAM:prod-web:3001}
 	}
 
 	header {

@@ -80,10 +80,15 @@ jobs:
             cd ~/$DIR
             # Версия фиксируется в .env — ручной `docker compose up` не откатит деплой.
             sed -i "s/^TAG=.*/TAG=${{ github.sha }}/" .env
-            docker compose -p $PROJECT -f $COMPOSE pull cms web
-            docker compose -p $PROJECT -f $COMPOSE up -d --remove-orphans
+            docker compose -p $PROJECT --env-file .env -f $COMPOSE pull cms web
+            docker compose -p $PROJECT --env-file .env -f $COMPOSE up -d --remove-orphans
+            # Прокси живёт в прод-стеке: перечитать Caddyfile (маршруты прода и dev-стенда).
+            if [ "$PROJECT" = muvna ]; then
+              docker compose -p muvna --env-file .env -f docker-compose.yml exec -T proxy \
+                caddy reload --config /etc/caddy-conf/Caddyfile --adapter caddyfile
+            fi
             docker image prune -f
-            docker compose -p $PROJECT -f $COMPOSE ps
+            docker compose -p $PROJECT --env-file .env -f $COMPOSE ps
       - name: Skip (no VPS secrets)
         if: env.VPS_HOST == ''
         run: echo "VPS_HOST не задан — образы собраны, выкладка пропущена."
