@@ -1,3 +1,4 @@
+import { reflect } from '@effector/reflect';
 import { RouterProvider } from '@effector/router-react';
 import type { Scope } from 'effector';
 import { Provider } from 'effector-react';
@@ -9,11 +10,13 @@ import { Header } from '@/widgets/header';
 import { isPreview } from '@/shared/config';
 import { useT } from '@/shared/i18n';
 import { router } from '@/shared/routing';
-import { MantineProvider, theme } from '@/shared/ui';
+import { MantineProvider, ProgressBar, theme } from '@/shared/ui';
 
 import styles from './App.module.css';
-import { AppGate } from './model';
+import { $isNavigating, AppGate } from './model';
 import { RoutesView } from './routes';
+
+const NavigationProgress = reflect({ view: ProgressBar, bind: { active: $isNavigating } });
 
 const PreviewBanner = () => {
   const t = useT();
@@ -25,6 +28,7 @@ export const App = ({ scope }: { scope: Scope }) => (
     <MantineProvider theme={theme} forceColorScheme="light">
       <RouterProvider router={router}>
         <AppGate />
+        <NavigationProgress />
         <div className={styles.shell}>
           <Header />
           <main className={styles.main}>

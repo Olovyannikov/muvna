@@ -71,6 +71,8 @@ export const CategoryModel = createModel(() => {
   });
 
   return {
+    /** Идёт загрузка данных страницы (для индикатора навигации). */
+    $loading: query.$pending,
     viewModel: {
       status: createPageStatus(query),
       category: query.$data.map((view) => view?.category ?? null),

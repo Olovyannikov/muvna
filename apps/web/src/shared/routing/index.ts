@@ -1,5 +1,6 @@
 import { createRoute, createRouter } from '@effector/router';
 import { createEffect, createEvent, createStore, sample, scopeBind } from 'effector';
+import { createAction } from 'effector-action';
 import type { History } from 'history';
 
 import { localeChanged, type Locale } from '../i18n';
@@ -58,10 +59,10 @@ const switchLocaleFx = createEffect(({ history, locale }: { history: History; lo
   history.push({ pathname: withLocale(stripLocale(pathname), locale), search, hash });
 });
 
-sample({
-  clock: localeSwitched,
-  source: $history,
-  filter: (history: History | null): history is History => history !== null,
-  fn: (history, locale) => ({ history, locale }),
-  target: switchLocaleFx,
+createAction(localeSwitched, {
+  source: { history: $history },
+  target: { switchLocale: switchLocaleFx },
+  fn: (target, { history }, locale) => {
+    if (history) target.switchLocale({ history, locale });
+  },
 });

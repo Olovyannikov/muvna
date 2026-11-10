@@ -12,6 +12,8 @@ export const HomeModel = createModel(() => {
   sample({ clock: routes.home.opened, fn: () => 'home', target: query.start });
 
   return {
+    /** Идёт загрузка данных страницы (для индикатора навигации). */
+    $loading: query.$pending,
     viewModel: {
       status: createPageStatus(query),
       page: query.$data,

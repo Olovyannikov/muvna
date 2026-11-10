@@ -1,5 +1,6 @@
 import { invoke } from '@withease/factories';
-import { createStore, sample } from 'effector';
+import { createStore } from 'effector';
+import { createAction } from 'effector-action';
 import { createMutation } from 'effector-refetch';
 
 import { CartModel } from '@/entities/cart';
@@ -39,20 +40,27 @@ export const CheckoutModel = createModel(() => {
     .on(placeOrder.finished.fail, (_, { error }) => ({ message: (error as Error).message || null }))
     .reset(placeOrder.start);
 
-  // На сервер уходят только id и количество — цены Payload пересчитывает сам.
-  sample({
-    clock: form.validSubmitted,
-    source: CartModel.$items,
-    filter: (items) => items.length > 0,
-    fn: (items, values) => ({
-      ...values,
-      email: values.email || undefined,
-      items: items.map((item) => ({ product: item.productId, quantity: item.quantity })),
-    }),
-    target: placeOrder.start,
+  createAction(form.validSubmitted, {
+    source: { items: CartModel.$items },
+    target: { placeOrder: placeOrder.start },
+    fn: (target, { items }, values) => {
+      if (!items.length) return;
+      // На сервер уходят только id и количество — цены Payload пересчитывает сам.
+      target.placeOrder({
+        ...values,
+        email: values.email || undefined,
+        items: items.map((item) => ({ product: item.productId, quantity: item.quantity })),
+      });
+    },
   });
 
-  sample({ clock: placeOrder.finished.done, target: [CartModel.cleared, form.reset] });
+  createAction(placeOrder.finished.done, {
+    target: { clearCart: CartModel.cleared, resetForm: form.reset },
+    fn: (target) => {
+      target.clearCart();
+      target.resetForm();
+    },
+  });
 
   return {
     viewModel: {

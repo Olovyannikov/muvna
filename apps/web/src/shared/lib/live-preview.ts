@@ -5,7 +5,8 @@ import {
   type CollectionPopulationRequestHandler,
 } from '@payloadcms/live-preview';
 import { createFactory } from '@withease/factories';
-import { createEffect, createEvent, sample, scopeBind, type StoreWritable } from 'effector';
+import { createEffect, createEvent, scopeBind, type StoreWritable } from 'effector';
+import { createAction } from 'effector-action';
 import { update } from 'effector-refetch';
 
 import { cmsOrigin, isPreview } from '../config';
@@ -82,15 +83,19 @@ export const syncLivePreview = createFactory(
         }),
     );
 
-    sample({
-      clock: livePreviewMessage,
-      source: query.$data as unknown as StoreWritable<T | null>,
-      filter: (data, message) =>
-        data !== null &&
-        (global ? message.globalSlug === global : message.collectionSlug === collection) &&
-        (!docId || global !== undefined || message.data.id === undefined || message.data.id === docId(data)),
-      fn: (data, message) => ({ message, id: data && docId ? docId(data) : undefined }),
-      target: mergeFx,
+    createAction(livePreviewMessage, {
+      source: { data: query.$data as unknown as StoreWritable<T | null> },
+      target: { merge: mergeFx },
+      fn: (target, { data }, message) => {
+        // данных на экране ещё нет — дополнять нечего
+        if (data === null) return;
+        // сообщение про другую коллекцию / глобал
+        if (global ? message.globalSlug !== global : message.collectionSlug !== collection) return;
+        // в коллекции — только про документ, который сейчас показан
+        const id = docId?.(data);
+        if (!global && docId && message.data.id !== undefined && message.data.id !== id) return;
+        target.merge({ message, id });
+      },
     });
 
     update({

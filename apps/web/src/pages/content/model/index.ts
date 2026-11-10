@@ -20,6 +20,8 @@ export const ContentModel = createModel(() => {
   sample({ clock: routes.page.closed, target: query.reset });
 
   return {
+    /** Идёт загрузка данных страницы (для индикатора навигации). */
+    $loading: query.$pending,
     viewModel: {
       status: createPageStatus(query),
       page: query.$data,

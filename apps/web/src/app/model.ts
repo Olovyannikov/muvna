@@ -1,5 +1,11 @@
 import { createEffect, sample } from 'effector';
 import { createGate } from 'effector-react';
+import { or } from 'patronum';
+
+import { $categoryLoading } from '@/pages/category';
+import { $contentLoading } from '@/pages/content';
+import { $homeLoading } from '@/pages/home';
+import { $productLoading } from '@/pages/product';
 
 import { SiteModel } from '@/entities/site';
 
@@ -35,3 +41,6 @@ sample({
   fn: (t) => ({ title: t('errors.notFoundTitle') }),
   target: metaChanged,
 });
+
+/** Грузится какая-то страница — показываем полосу прогресса вверху. */
+export const $isNavigating = or($homeLoading, $contentLoading, $categoryLoading, $productLoading);

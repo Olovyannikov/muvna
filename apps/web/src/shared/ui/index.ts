@@ -11,3 +11,4 @@ export { ErrorState } from './error-state/ErrorState';
 export { createPageView, PageSkeleton, NotFoundState } from './page-view/PageView';
 export { theme } from './theme/theme';
 export * from './mantine';
+export { ProgressBar } from './progress-bar/ProgressBar';
