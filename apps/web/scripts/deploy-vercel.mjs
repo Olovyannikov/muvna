@@ -43,7 +43,7 @@ const vercel = (...args) =>
   ).trim();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const brief = (d) =>
-  `${d.uid} ${d.readyState ?? d.state}${d.readySubstate ? `/${d.readySubstate}` : ''} ${d.target ?? 'preview'} ${new Date(d.createdAt ?? d.created).toISOString()}`;
+  `${d.uid ?? d.id} ${d.readyState ?? d.state}${d.readySubstate ? `/${d.readySubstate}` : ''} ${d.target ?? 'preview'} ${new Date(d.createdAt ?? d.created).toISOString()}`;
 
 // 1. регион функций — настройка проекта (regions в .vc-config.json подвешивает сборку)
 try {
