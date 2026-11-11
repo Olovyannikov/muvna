@@ -1,7 +1,8 @@
 // Деплой собранного .vercel/output в проект muvna-dev (вызывается из .github/workflows/vercel.yml).
 // Env: VERCEL_TOKEN, VERCEL_SCOPE (slug команды, необязательно), PROD=1 — прод-алиас.
 import { execFileSync } from 'node:child_process';
-import { appendFileSync } from 'node:fs';
+import { appendFileSync, cpSync, mkdtempSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,8 +10,11 @@ const PROJECT = 'muvna-dev';
 // Франкфурт — ближе всего к CMS в Москве: каждый рендер ходит туда за данными.
 const REGION = 'fra1';
 const WAIT_MS = 4 * 60_000;
-// apps/web: тут .vercel/output и привязка к проекту
-const cwd = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+// Деплоим из каталога вне git: иначе CLI прикладывает автора коммита, и на Hobby
+// Vercel блокирует деплой (TEAM_ACCESS_REQUIRED), если автор — не владелец аккаунта.
+const web = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const cwd = mkdtempSync(path.join(os.tmpdir(), 'muvna-vercel-'));
+cpSync(path.join(web, '.vercel/output'), path.join(cwd, '.vercel/output'), { recursive: true });
 
 const { VERCEL_TOKEN: token, VERCEL_SCOPE: scope, PROD, GITHUB_STEP_SUMMARY } = process.env;
 if (!token) throw new Error('VERCEL_TOKEN не задан');
