@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  effector-refetch@0.24.0:
-    hash: 1752c079e6e3ff968398a8a846bbd0cf26a19aaae4056b244a0d4c4842e11d79
-    path: patches/effector-refetch@0.24.0.patch
-
 importers:
 
   .:
@@ -150,8 +145,8 @@ importers:
         specifier: ^23.3.0
         version: 23.3.0(effector@23.4.4)(react@19.2.6)
       effector-refetch:
-        specifier: ^0.24.0
-        version: 0.24.0(patch_hash=1752c079e6e3ff968398a8a846bbd0cf26a19aaae4056b244a0d4c4842e11d79)(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6)
+        specifier: ^0.26.1
+        version: 0.26.1(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6)
       effector-storage:
         specifier: ^8.0.0
         version: 8.0.0(effector@23.4.4)
@@ -2402,8 +2397,8 @@ packages:
       effector: ^23.0.0
       react: '>=16.8.0 <20.0.0'
 
-  effector-refetch@0.24.0:
-    resolution: {integrity: sha512-5l1YyZZQzmVSEG4liOOUET6PYGh1fYd1hFsrPIY2AJcGz73GVtw94H2kx3iZgqSSrxPiOYC5RseZRHPfdzxqUA==}
+  effector-refetch@0.26.1:
+    resolution: {integrity: sha512-/crO6+7Y8sGePdfJtGcPOQNEEINuwS2veWa/TEI1eN8Kaxdn2nVs5B81+d9Vu5hiQZPE+dgyNTriLgjfq+9PpQ==}
     engines: {node: '>=18'}
     peerDependencies:
       '@hey-api/openapi-ts': '>=0.82.0 <0.83.0'
@@ -6224,7 +6219,7 @@ snapshots:
       react: 19.2.6
       use-sync-external-store: 1.7.0(react@19.2.6)
 
-  effector-refetch@0.24.0(patch_hash=1752c079e6e3ff968398a8a846bbd0cf26a19aaae4056b244a0d4c4842e11d79)(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6):
+  effector-refetch@0.26.1(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6):
     dependencies:
       effector: 23.4.4
     optionalDependencies:

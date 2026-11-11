@@ -42,12 +42,12 @@ export const i18n = createI18nextIntegration({ instance: createInstanceFx, setup
 
 export const $t = i18n.$t;
 
-sample({ clock: $locale.updates, target: i18n.changeLanguageFx });
+sample({ clock: $locale, target: i18n.changeLanguageFx });
 
 const syncHtmlLangFx = createEffect((locale: Locale) => {
   if (typeof document !== 'undefined') document.documentElement.lang = locale;
 });
-sample({ clock: $locale.updates, target: syncHtmlLangFx });
+sample({ clock: $locale, target: syncHtmlLangFx });
 
 /** t() текущего скоупа для компонентов. */
 export const useT = () => useUnit($t);

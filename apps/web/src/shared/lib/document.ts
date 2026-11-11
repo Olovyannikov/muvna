@@ -41,4 +41,4 @@ const syncDocumentFx = createEffect((meta: DocumentMeta) => {
   setMetaTag('property', 'og:title', formatTitle(meta.title));
 });
 
-sample({ clock: $meta.updates, target: syncDocumentFx });
+sample({ clock: $meta, target: syncDocumentFx });

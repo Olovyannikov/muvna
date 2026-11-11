@@ -36,9 +36,6 @@
       "sharp",
       "esbuild",
       "unrs-resolver"
-    ],
-    "patchedDependencies": {
-      "effector-refetch@0.24.0": "patches/effector-refetch@0.24.0.patch"
-    }
+    ]
   }
 }

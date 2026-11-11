@@ -27,7 +27,7 @@
     "effector": "^23.4.4",
     "effector-action": "^1.2.2",
     "effector-react": "^23.3.0",
-    "effector-refetch": "^0.24.0",
+    "effector-refetch": "^0.26.1",
     "effector-storage": "^8.0.0",
     "embla-carousel": "^8.6.0",
     "embla-carousel-autoplay": "^8.6.0",
