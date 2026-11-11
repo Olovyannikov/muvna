@@ -50,6 +50,18 @@ jobs:
             -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' \
             -d '{"serverlessFunctionRegion":"fra1"}' -o /dev/null \
             && echo "function region: fra1" || echo "::warning::не удалось задать регион функции fra1"
+          # зависшая сборка держит очередь (на Hobby сборки идут по одной) — отменяем такие
+          node -e '
+            const q = new URLSearchParams({ app: "muvna-dev", state: "BUILDING,QUEUED,INITIALIZING", limit: "20" });
+            if (process.env.VERCEL_SCOPE) q.set("slug", process.env.VERCEL_SCOPE);
+            const h = { Authorization: `Bearer ${process.env.VERCEL_TOKEN}` };
+            const sfx = q.has("slug") ? `?slug=${q.get("slug")}` : "";
+            const { deployments = [] } = await (await fetch(`https://api.vercel.com/v6/deployments?${q}`, { headers: h })).json();
+            for (const d of deployments) {
+              const r = await fetch(`https://api.vercel.com/v12/deployments/${d.uid}/cancel${sfx}`, { method: "PATCH", headers: h });
+              console.log(`cancel ${d.uid} (${d.state}): ${r.status}`);
+            }
+          ' --input-type=module || echo "::warning::не удалось проверить зависшие деплои"
           npx --yes vercel@65 link --yes --project muvna-dev --token "$VERCEL_TOKEN" $SCOPE
           URL=$(npx --yes vercel@65 deploy --prebuilt $PROD --token "$VERCEL_TOKEN" $SCOPE)
           echo "### Vercel: $URL" >> "$GITHUB_STEP_SUMMARY"
