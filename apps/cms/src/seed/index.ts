@@ -325,7 +325,9 @@ const run = async () => {
       eyebrow: '#muvnacoffeetools',
       title: 'Инструменты для идеальной чашки',
       text: home.hero.subtitle,
-      image: home.hero.image,
+      // фото главной на старом сайте — тот же кадр, что у раздела воронок (второй слайд);
+      // берём фото эспрессо-раздела, куда и ведёт слайд
+      image: findCategory('temper').category.hero.image,
       link: { label: 'Смотреть каталог', url: '/espresso/temper' },
     },
     ...(['dripper', 'smart'] as const).map((slug) => {
