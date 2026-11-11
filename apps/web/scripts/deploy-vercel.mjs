@@ -66,7 +66,14 @@ for (const d of deployments) {
 
 // 3. деплой без ожидания в CLI — статус опрашиваем сами, чтобы видеть, на чём стоим
 vercel('link', '--yes', '--project', PROJECT);
-const url = vercel('deploy', '--prebuilt', '--no-wait', ...(PROD === '1' ? ['--prod'] : []));
+// CLI падает с «deployment failed», но URL успевает вывести — по нему и смотрим причину
+let url;
+try {
+  url = vercel('deploy', '--prebuilt', '--no-wait', ...(PROD === '1' ? ['--prod'] : []));
+} catch (e) {
+  url = String(e.stdout ?? '').trim();
+  if (!url.startsWith('https://')) throw e;
+}
 console.log(`deployment: ${url}`);
 
 let d;
@@ -75,15 +82,15 @@ for (const start = Date.now(); Date.now() - start < WAIT_MS; await sleep(5000)) 
   d = await api(`/v13/deployments/${new URL(url).host}`);
   const now = brief(d);
   if (now !== last) console.log(`  ${((Date.now() - start) / 1000).toFixed(0)}s ${(last = now)}`);
-  if (['READY', 'ERROR', 'CANCELED'].includes(d.readyState)) break;
+  if (['READY', 'ERROR', 'CANCELED', 'BLOCKED'].includes(d.readyState)) break;
 }
 
 if (d?.readyState !== 'READY') {
-  const { readyState, readySubstate, errorCode, errorMessage, regions, buildingAt, ready } = d ?? {};
-  console.log(
-    'deployment state:',
-    JSON.stringify({ readyState, readySubstate, errorCode, errorMessage, regions, buildingAt, ready }),
+  // всё, что похоже на причину отказа: errorCode/errorMessage, blocked*, *Reason и т.п.
+  const reason = Object.fromEntries(
+    Object.entries(d ?? {}).filter(([k]) => /error|block|reason|state|region|plan|limit/i.test(k)),
   );
+  console.log('deployment state:', JSON.stringify(reason, null, 2));
   try {
     console.log(vercel('inspect', url, '--logs'));
   } catch (e) {
