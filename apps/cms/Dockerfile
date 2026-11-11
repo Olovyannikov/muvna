@@ -5,6 +5,7 @@ WORKDIR /repo
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY patches patches
 COPY apps/cms/package.json apps/cms/
 RUN pnpm install --frozen-lockfile --filter @muvna/cms...
 

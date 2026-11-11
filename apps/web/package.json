@@ -41,8 +41,11 @@
     "sirv": "^3.0.2"
   },
   "devDependencies": {
+    "@babel/core": "7.29.0",
     "@feature-sliced/steiger-plugin": "^0.8.2",
+    "@rolldown/plugin-babel": "0.3.0",
     "@testing-library/react": "^16.3.3",
+    "@types/babel__core": "^7.20.5",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "^6.3.0",
