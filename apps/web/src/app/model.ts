@@ -1,6 +1,6 @@
 import { createEffect, sample } from 'effector';
 import { createGate } from 'effector-react';
-import { or } from 'patronum';
+import { once, or } from 'patronum';
 
 import { $categoryLoading } from '@/pages/category';
 import { $contentLoading } from '@/pages/content';
@@ -26,10 +26,11 @@ sample({
 /**
  * Открывается, когда React закончил гидратацию (эффекты Gate идут после коммита).
  * Только после этого можно трогать браузерное состояние — иначе разметка разойдётся с серверной.
+ * once: StrictMode в dev открывает Gate дважды — слушатель Live Preview не должен задвоиться.
  */
 export const AppGate = createGate({ name: 'app' });
 
-sample({ clock: AppGate.open, target: appMounted });
+sample({ clock: once(AppGate.open), target: appMounted });
 sample({ clock: appMounted, target: startLivePreviewFx });
 
 // Новая страница — к началу (кроме якорных ссылок).

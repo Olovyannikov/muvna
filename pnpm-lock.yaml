@@ -104,13 +104,13 @@ importers:
     dependencies:
       '@effector/reflect':
         specifier: ^10.1.1
-        version: 10.1.1(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6)
+        version: 10.1.1(effector-react@23.3.0(effector@23.5.1)(react@19.2.6))(effector@23.5.1)(react@19.2.6)
       '@effector/router':
         specifier: ^1.2.0
-        version: 1.2.0(effector-action@1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4)))(effector@23.4.4)(patronum@2.3.0(effector@23.4.4))(query-string@9.5.1)(zod@4.6.7)
+        version: 1.2.0(effector-action@1.2.2(effector@23.5.1)(patronum@2.3.0(effector@23.5.1)))(effector@23.5.1)(patronum@2.3.0(effector@23.5.1))(query-string@9.5.1)(zod@4.6.7)
       '@effector/router-react':
         specifier: ^1.0.2
-        version: 1.0.2(effector-action@1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4)))(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(patronum@2.3.0(effector@23.4.4))(react@19.2.6)(zod@4.6.7)
+        version: 1.0.2(effector-action@1.2.2(effector@23.5.1)(patronum@2.3.0(effector@23.5.1)))(effector-react@23.3.0(effector@23.5.1)(react@19.2.6))(effector@23.5.1)(patronum@2.3.0(effector@23.5.1))(react@19.2.6)(zod@4.6.7)
       '@fontsource-variable/jost':
         specifier: ^5.3.0
         version: 5.3.0
@@ -131,25 +131,22 @@ importers:
         version: 1.0.5
       '@withease/i18next':
         specifier: ^25.0.0
-        version: 25.0.0(effector@23.4.4)(i18next@25.10.10(typescript@5.9.3))
+        version: 25.0.0(effector@23.5.1)(i18next@25.10.10(typescript@5.9.3))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
       effector:
-        specifier: ^23.4.4
-        version: 23.4.4
-      effector-action:
-        specifier: ^1.2.2
-        version: 1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4))
+        specifier: ^23.5.1
+        version: 23.5.1
       effector-react:
         specifier: ^23.3.0
-        version: 23.3.0(effector@23.4.4)(react@19.2.6)
+        version: 23.3.0(effector@23.5.1)(react@19.2.6)
       effector-refetch:
         specifier: ^0.26.1
-        version: 0.26.1(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6)
+        version: 0.26.1(effector-react@23.3.0(effector@23.5.1)(react@19.2.6))(effector@23.5.1)(react@19.2.6)
       effector-storage:
         specifier: ^8.0.0
-        version: 8.0.0(effector@23.4.4)
+        version: 8.0.0(effector@23.5.1)
       embla-carousel:
         specifier: ^8.6.0
         version: 8.6.0
@@ -170,7 +167,7 @@ importers:
         version: 25.10.10(typescript@5.9.3)
       patronum:
         specifier: ^2.3.0
-        version: 2.3.0(effector@23.4.4)
+        version: 2.3.0(effector@23.5.1)
       react:
         specifier: 19.2.6
         version: 19.2.6
@@ -2430,8 +2427,8 @@ packages:
     peerDependencies:
       effector: ^23.0.0
 
-  effector@23.4.4:
-    resolution: {integrity: sha512-QkZboRN28K/iwxigDhlJcI3ux3aNbt8kYGGH/GkqWG0OlGeyuBhb7PdM89Iu+ogV8Lmz16xIlwnXR2UNWI6psg==}
+  effector@23.5.1:
+    resolution: {integrity: sha512-QklgDt4NU62uhJo2suyOCADYczlX14vVj3ResBRfk4L7ERh8Fv/pS5AkgyhjwhW5VbFqCz5gHpKLr6zjM1BFGw==}
     engines: {node: '>=11.0.0'}
 
   electron-to-chromium@1.5.479:
@@ -4426,19 +4423,19 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
-  '@effector/reflect@10.1.1(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6)':
+  '@effector/reflect@10.1.1(effector-react@23.3.0(effector@23.5.1)(react@19.2.6))(effector@23.5.1)(react@19.2.6)':
     dependencies:
-      effector: 23.4.4
-      effector-react: 23.3.0(effector@23.4.4)(react@19.2.6)
+      effector: 23.5.1
+      effector-react: 23.3.0(effector@23.5.1)(react@19.2.6)
       react: 19.2.6
 
   '@effector/router-paths@1.1.0': {}
 
-  '@effector/router-react@1.0.2(effector-action@1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4)))(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(patronum@2.3.0(effector@23.4.4))(react@19.2.6)(zod@4.6.7)':
+  '@effector/router-react@1.0.2(effector-action@1.2.2(effector@23.5.1)(patronum@2.3.0(effector@23.5.1)))(effector-react@23.3.0(effector@23.5.1)(react@19.2.6))(effector@23.5.1)(patronum@2.3.0(effector@23.5.1))(react@19.2.6)(zod@4.6.7)':
     dependencies:
-      '@effector/router': 1.2.0(effector-action@1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4)))(effector@23.4.4)(patronum@2.3.0(effector@23.4.4))(query-string@9.5.1)(zod@4.6.7)
-      effector: 23.4.4
-      effector-react: 23.3.0(effector@23.4.4)(react@19.2.6)
+      '@effector/router': 1.2.0(effector-action@1.2.2(effector@23.5.1)(patronum@2.3.0(effector@23.5.1)))(effector@23.5.1)(patronum@2.3.0(effector@23.5.1))(query-string@9.5.1)(zod@4.6.7)
+      effector: 23.5.1
+      effector-react: 23.3.0(effector@23.5.1)(react@19.2.6)
       query-string: 9.5.1
       react: 19.2.6
     transitivePeerDependencies:
@@ -4446,12 +4443,12 @@ snapshots:
       - patronum
       - zod
 
-  '@effector/router@1.2.0(effector-action@1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4)))(effector@23.4.4)(patronum@2.3.0(effector@23.4.4))(query-string@9.5.1)(zod@4.6.7)':
+  '@effector/router@1.2.0(effector-action@1.2.2(effector@23.5.1)(patronum@2.3.0(effector@23.5.1)))(effector@23.5.1)(patronum@2.3.0(effector@23.5.1))(query-string@9.5.1)(zod@4.6.7)':
     dependencies:
       '@effector/router-paths': 1.1.0
-      effector: 23.4.4
-      effector-action: 1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4))
-      patronum: 2.3.0(effector@23.4.4)
+      effector: 23.5.1
+      effector-action: 1.2.2(effector@23.5.1)(patronum@2.3.0(effector@23.5.1))
+      patronum: 2.3.0(effector@23.5.1)
       query-string: 9.5.1
       zod: 4.6.7
 
@@ -5913,9 +5910,9 @@ snapshots:
 
   '@withease/factories@1.0.5': {}
 
-  '@withease/i18next@25.0.0(effector@23.4.4)(i18next@25.10.10(typescript@5.9.3))':
+  '@withease/i18next@25.0.0(effector@23.5.1)(i18next@25.10.10(typescript@5.9.3))':
     dependencies:
-      effector: 23.4.4
+      effector: 23.5.1
       i18next: 25.10.10(typescript@5.9.3)
 
   acorn-jsx@5.3.2(acorn@8.19.0):
@@ -6208,29 +6205,29 @@ snapshots:
       '@types/pg': 8.20.0
       pg: 8.20.0
 
-  effector-action@1.2.2(effector@23.4.4)(patronum@2.3.0(effector@23.4.4)):
+  effector-action@1.2.2(effector@23.5.1)(patronum@2.3.0(effector@23.5.1)):
     dependencies:
-      effector: 23.4.4
-      patronum: 2.3.0(effector@23.4.4)
+      effector: 23.5.1
+      patronum: 2.3.0(effector@23.5.1)
 
-  effector-react@23.3.0(effector@23.4.4)(react@19.2.6):
+  effector-react@23.3.0(effector@23.5.1)(react@19.2.6):
     dependencies:
-      effector: 23.4.4
+      effector: 23.5.1
       react: 19.2.6
       use-sync-external-store: 1.7.0(react@19.2.6)
 
-  effector-refetch@0.26.1(effector-react@23.3.0(effector@23.4.4)(react@19.2.6))(effector@23.4.4)(react@19.2.6):
+  effector-refetch@0.26.1(effector-react@23.3.0(effector@23.5.1)(react@19.2.6))(effector@23.5.1)(react@19.2.6):
     dependencies:
-      effector: 23.4.4
+      effector: 23.5.1
     optionalDependencies:
-      effector-react: 23.3.0(effector@23.4.4)(react@19.2.6)
+      effector-react: 23.3.0(effector@23.5.1)(react@19.2.6)
       react: 19.2.6
 
-  effector-storage@8.0.0(effector@23.4.4):
+  effector-storage@8.0.0(effector@23.5.1):
     dependencies:
-      effector: 23.4.4
+      effector: 23.5.1
 
-  effector@23.4.4: {}
+  effector@23.5.1: {}
 
   electron-to-chromium@1.5.479: {}
 
@@ -7259,9 +7256,9 @@ snapshots:
 
   pathe@2.0.3: {}
 
-  patronum@2.3.0(effector@23.4.4):
+  patronum@2.3.0(effector@23.5.1):
     dependencies:
-      effector: 23.4.4
+      effector: 23.5.1
 
   payload@3.93.0(graphql@16.15.0)(typescript@5.9.3):
     dependencies:
@@ -7736,13 +7733,13 @@ snapshots:
       '@feature-sliced/steiger-plugin': 0.8.2(typescript@5.9.3)
       chokidar: 4.0.3
       cosmiconfig: 10.0.1
-      effector: 23.4.4
+      effector: 23.5.1
       empathic: 1.1.0
       fastest-levenshtein: 1.0.16
       globby: 16.2.4
       immer: 10.2.0
       micromatch: 4.0.8
-      patronum: 2.3.0(effector@23.4.4)
+      patronum: 2.3.0(effector@23.5.1)
       picocolors: 1.1.1
       prexit: 2.3.0
       yargs: 17.7.3

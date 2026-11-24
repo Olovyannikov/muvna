@@ -1,5 +1,5 @@
 import { createI18nextIntegration } from '@withease/i18next';
-import { attach, createEffect, createEvent, createStore, sample } from 'effector';
+import { attach, createEffect, createEvent, restore, sample } from 'effector';
 import { useUnit } from 'effector-react';
 import i18next from 'i18next';
 
@@ -13,11 +13,8 @@ export const defaultLocale: Locale = 'ru';
 /** Язык определяется URL (/en/... — английский). Шлёт роутинг; UI переключает язык через навигацию. */
 export const localeChanged = createEvent<Locale>();
 
-/** Текущий язык интерфейса и контента — от него зависят все запросы к CMS. sid — для SSR. */
-export const $locale = createStore<Locale>(defaultLocale, { sid: 'muvna/i18n/$locale' }).on(
-  localeChanged,
-  (_, locale) => locale,
-);
+/** Текущий язык интерфейса и контента — от него зависят все запросы к CMS. */
+export const $locale = restore(localeChanged, defaultLocale);
 
 /** Инициализация i18next: на сервере перед рендером, в браузере — до гидратации. */
 export const i18nStarted = createEvent();

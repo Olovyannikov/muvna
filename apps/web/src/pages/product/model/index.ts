@@ -1,6 +1,7 @@
 import { invoke } from '@withease/factories';
-import { createEvent, createStore, sample } from 'effector';
+import { createEvent, createStore, restore, sample } from 'effector';
 import { attachToRoute, createQuery, keepFresh } from 'effector-refetch';
+import { reset } from 'patronum';
 
 import { fetchProductFx } from '@/entities/product';
 
@@ -75,13 +76,10 @@ export const ProductModel = createModel(() => {
   const imageSelected = createEvent<number>();
   const quantitySet = createEvent<number>();
 
-  const $activeImage = createStore(0)
-    .on(imageSelected, (_, index) => index)
-    .reset(routes.product.opened, routes.product.updated);
+  const $activeImage = restore(imageSelected, 0);
+  const $quantity = createStore(1).on(quantitySet, (_, quantity) => Math.max(1, quantity));
 
-  const $quantity = createStore(1)
-    .on(quantitySet, (_, quantity) => Math.max(1, quantity))
-    .reset(routes.product.opened, routes.product.updated);
+  reset({ clock: [routes.product.opened, routes.product.updated], target: [$activeImage, $quantity] });
 
   sample({
     clock: query.finished.fail,

@@ -1,4 +1,4 @@
-import { createEffect, createEvent, createStore, sample } from 'effector';
+import { createEffect, createEvent, restore, sample } from 'effector';
 
 import { siteName } from '../config';
 
@@ -15,8 +15,8 @@ export interface DocumentMeta {
 /** Страница сообщает свои мета-данные. */
 export const metaChanged = createEvent<DocumentMeta>();
 
-/** Мета текущей страницы: сервер пишет их в <head>, браузер синхронизирует document. sid — для SSR. */
-export const $meta = createStore<DocumentMeta>({}, { sid: 'muvna/meta' }).on(metaChanged, (_, meta) => meta);
+/** Мета текущей страницы: сервер пишет их в <head>, браузер синхронизирует document. */
+export const $meta = restore(metaChanged, {});
 
 export const formatTitle = (title?: string | null): string =>
   title ? (title.includes(siteName) ? title : `${title} — ${siteName}`) : siteName;

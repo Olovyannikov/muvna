@@ -5,8 +5,7 @@ import {
   type CollectionPopulationRequestHandler,
 } from '@payloadcms/live-preview';
 import { createFactory } from '@withease/factories';
-import { createEffect, createEvent, scopeBind, type StoreWritable } from 'effector';
-import { createAction } from 'effector-action';
+import { createEffect, createEvent, perform, scopeBind, type Store } from 'effector';
 import { update } from 'effector-refetch';
 
 import { cmsOrigin, isPreview } from '../config';
@@ -83,10 +82,11 @@ export const syncLivePreview = createFactory(
         }),
     );
 
-    createAction(livePreviewMessage, {
-      source: { data: query.$data as unknown as StoreWritable<T | null> },
-      target: { merge: mergeFx },
-      fn: (target, { data }, message) => {
+    perform({
+      clock: livePreviewMessage,
+      source: query.$data as unknown as Store<T | null>,
+      target: mergeFx,
+      action: (merge, data, message) => {
         // данных на экране ещё нет — дополнять нечего
         if (data === null) return;
         // сообщение про другую коллекцию / глобал
@@ -94,7 +94,7 @@ export const syncLivePreview = createFactory(
         // в коллекции — только про документ, который сейчас показан
         const id = docId?.(data);
         if (!global && docId && message.data.id !== undefined && message.data.id !== id) return;
-        target.merge({ message, id });
+        merge({ message, id });
       },
     });
 
